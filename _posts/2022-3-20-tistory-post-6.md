@@ -82,13 +82,13 @@ ITWorld Korea 뉴스 페이지
 card-title 추출 결과
 {: .text-center}
 
-`$('.card-title')`{: .javascript}을 실행해서 확인해보면 `card-title` class만 가지고 추출한 결과 한 페이지에 나오는 기사는 총 17개인데 21개의 class가 추출된 것을 확인할 수 있습니다. 위 결과에서 볼 수 있듯이 17번 인덱스의 `card-title`은 우측의 다른 곳에서도 사용되고있는데, 이를 해결하기 위해 좀 더 명확하게 추출할 곳을 명시해봅니다.
+`$('.card-title')`을 실행해서 확인해보면 `card-title` class만 가지고 추출한 결과 한 페이지에 나오는 기사는 총 17개인데 21개의 class가 추출된 것을 확인할 수 있습니다. 위 결과에서 볼 수 있듯이 17번 인덱스의 `card-title`은 우측의 다른 곳에서도 사용되고있는데, 이를 해결하기 위해 좀 더 명확하게 추출할 곳을 명시해봅니다.
 
 ![devtools 2](/assets/images/posts/2022-3-20-tistory-post-6/img-4.png)
 section-content 내 card-title 추출 결과
 {: .text-center}
 
-추출할 기사의 영역이 `section-content`이기 때문에 `section-content`안에 있는 `card-title`을 추출하도록 `$('.section-content .card-title')`{: .javascript}을 실행합니다. 이제 추출하고자 했던 17개의 기사 제목이 추출된 것을 확인할 수 있습니다. `card-text`도 위와 같은 방식으로 확인해보면 되는데, `card-text`의 경우 하나의 card 안에 2개씩 사용되고있기 때문에 같이 사용된 `crop-text-2`를 가지고 추출(`$('.section-content .crop-text-2')`{: .javascript})해서 동일하게 17개가 추출되는 것을 확인합니다.
+추출할 기사의 영역이 `section-content`이기 때문에 `section-content`안에 있는 `card-title`을 추출하도록 `$('.section-content .card-title')`을 실행합니다. 이제 추출하고자 했던 17개의 기사 제목이 추출된 것을 확인할 수 있습니다. `card-text`도 위와 같은 방식으로 확인해보면 되는데, `card-text`의 경우 하나의 card 안에 2개씩 사용되고있기 때문에 같이 사용된 `crop-text-2`를 가지고 추출(`$('.section-content .crop-text-2')`)해서 동일하게 17개가 추출되는 것을 확인합니다.
 
 이제 Python에서 BeautifulSoup을 통해 추출을 해보겠습니다. 먼저 requests를 이용해 페이지의 HTML을 가져옵니다.
 
