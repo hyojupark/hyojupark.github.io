@@ -1,0 +1,36 @@
+---
+title: Airflow v2.2 이상 schedule 관련 용어
+toc: true
+categories:
+  - Airflow
+tags:
+  - airflow
+  - data_interval_end
+  - data_interval_start
+  - execution_date
+  - logical_date
+---
+
+기존에 Airflow에서 schedule 처리를 진행할 때 execution\_date, next\_execution\_date과 같은 변수를 사용해왔는데, **2.2버전부터** 좀 더 명확한 용어로 변경되었습니다. 현재 최신 버전인 v2.3을 이용해도 호환성을 위해 아직 사용이 가능하지만, 향후 legacy 지원이 끊기는 것과 유지 보수를 대비해 최신 변경 사항을 반영하는 것이 좋습니다.
+
+
+ 
+
+
+기존에 사용되는 용어에 대한 내용은 <https://medium.com/flyr-labs-blog/dag-dependencies-and-the-apache-airflow-scheduler-ee2a714daa36> 여기서 자세히 확인할 수 있습니다.
+
+
+ 
+
+
+변경된 점은 기존에 time window를 기반으로 증분처리할 때 시작 시간과 종료 시간으로 **execution\_date**와 **next\_execution\_date**를 이용했는데, v2.2 이상부터는 **data\_interval\_start**와 **data\_interval\_end**와 같이 직관적인 용어를 이용하면 됩니다.
+
+
+또한 Airflow dashboard에서 DAG의 detail을 살펴보면 task의 **execution\_date**가 **logical\_date**로 변경된 것을 확인할 수 있습니다. Airflow 사용 시 이 점을 인지하고 사용하면 됩니다.
+
+
+ 
+
+
+더 자세한 내용은 <https://blog.bsk.im/2021/03/21/apache-airflow-aip-39/> 김범수님의 블로그에 아주 잘 설명되어있으니 찾아가서 보는 것을 추천합니다.
+
