@@ -6,3 +6,25 @@
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
+
+// @import url(https://fonts.googleapis.com/css?Dokdo|Noto+Sans+KR|Cousine);
+@import url(https://fonts.googleapis.com/css2?family=Cousine&family=Noto+Sans+KR&display=swap);
+
+// $sans-serif: 'Noto Sans KR';
+// $sans-serif: "Dokdo";
+// $serif: 'Dokdo' !default;
+// $global-font-family: $serif !default;
+
+$monospace: "Cousine";
+$type-size-4-5: 1em !default;
+
+.highlight {
+    font-family: $monospace;
+    font-size: $type-size-4-5;
+  }
+  
+  .language-plaintext {
+    font-family: $monospace;
+    font-size: $type-size-5;
+    background: #efefef;
+  }
