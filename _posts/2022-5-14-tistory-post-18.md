@@ -15,18 +15,11 @@ tags:
 
 Airflow가 아직 윈도우를 지원하지 않기 때문에 WSL을 이용해서 설치하는 방법을 설치하는 겸 Ubuntu에서 설치하는 방법과 큰 차이는 없기 때문에 두 가지 방법을 비교하면서 설명하겠습니다.
 
+## **설치 방법 (Ubuntu 20.04, Windows WSL2)**
 
- 
+### **Ubuntu 20.04 기준 설치 방법**
 
-
-### **설치 방법 (Ubuntu 20.04, Windows WSL2)**
-
-
-**Ubuntu 20.04 기준 설치 방법**
-
-
-
-```
+```bash
 mkdir ~/airflow
 cd ~/airflow
 
@@ -38,14 +31,9 @@ echo "export AIRFLOW_HOME=~/airflow" >> ~/.bashrc
 source ~/.bashrc
 ```
 
- 
+### **Windows WSL2 (Ubuntu 20.04) 기준 설치 방법**
 
-
-**Windows WSL2 (Ubuntu 20.04) 기준 설치 방법**
-
-
-
-```
+```bash
 mkdir ~/airflow
 cd ~/airflow
 
@@ -65,20 +53,11 @@ sudo mount -t drvfs C: /mnt/c -o metadata
 sudo chown -R user:user $AIRFLOW_HOME
 ```
 
- 
+##  **설정 및 실행**
 
+### **데이터베이스 초기화 및 Admin 계정 추가**
 
- 
-
-
-###  **설정 및 실행**
-
-
-**데이터베이스 초기화 및 Admin 계정 추가**
-
-
-
-```
+```bash
 airflow db init
 airflow users create \
 --username admin \ 
@@ -88,39 +67,14 @@ airflow users create \
 --email admin@example.com
 ```
 
- 
-
-
-**Airflow webserver 및 scheduler 실행**
-
+### **Airflow webserver 및 scheduler 실행**
 
 * Airflow는 web server와 scheduler를 각각 실행시켜줘야하기 때문에 터미널을 2개 띄워서 각각 실행해줍니다.
 
-
-
-```
+```bash
 airflow webserver -p 8888
 ```
 
-
-```
+```bash
 airflow scheduler
 ```
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
-
- 
-
