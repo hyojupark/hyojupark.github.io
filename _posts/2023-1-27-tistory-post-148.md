@@ -11,6 +11,15 @@ tags:
   - undefined method
 ---
 
+---
+
+**이전 포스트**
+- [GitHub 블로그 생성기 (Mac 기준)]({% post_url 2023-1-26-tistory-post-147 %})
+
+---
+
+<br>
+
 ## Minimal-Mistakes 테마 설치
 테마는 `https://github.com/mmistakes/minimal-mistakes/releases`여기서 최신 버전(4.24.0) source code를 받아서 사용했습니다. 받고나서 압축을 풀고 아래 항목은 삭제합니다.
 
@@ -54,7 +63,7 @@ $ bundle exec jekyll serve
 
 `127.0.0.1:4000`으로 접속했을 때 웹서버가 뜨면 성공입니다.
 
-**Reference**
+## **Reference**
 * <https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/>
 * <https://github.com/jekyll/jekyll/issues/9233>
 * <https://thoughtfulapps.com/articles/jekyll/ruby/undefined-method-tainted-jekyll-error>

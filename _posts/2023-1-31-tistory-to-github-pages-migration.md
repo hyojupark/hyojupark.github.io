@@ -9,6 +9,16 @@ tags:
   - Migration
 ---
 
+---
+
+**이전 포스트**
+- [GitHub 블로그 생성기 (Mac 기준)]({% post_url 2023-1-26-tistory-post-147 %})
+- [minimal-mistakes jekyll 테마 적용 (근데 이제 ruby 3.2에서 생긴 오류를 곁들인)]({% post_url 2023-1-27-tistory-post-148 %})
+
+---
+
+<br>
+
 이제 GitHub Pages 설치를 완료했으니 기존 Tistory에 작성한 글들을 옮기겠습니다.
 아래 사용된 코드([Migration Code](https://github.com/hyojupark/tistory-to-github-page-migration))은 **GitHub**에 공개해놨습니다. (도움이 됐다면 Star를 눌러주세요😁)
 
