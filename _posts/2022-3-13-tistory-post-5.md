@@ -12,7 +12,7 @@ tags:
   - Windows
 ---
 
-###  **ELK Stack이란**
+##  **ELK Stack이란**
 
 
 **ELK Stack**은 **Elasticsearch**, **Logstash**, **Kibana** 세 가지 프로젝트로 구성된 Stack으로, 데이터 수집, 분석, 시각화 기능을 제공합니다. 최근에는 **Beat**가 Stack에 포함되면서 **Elastic Stack**이라고 부릅니다. 일반적으로 서버의 metric이나 log 분석용으로 많이 사용됩니다.
@@ -22,7 +22,7 @@ tags:
 이는 7.10.2 버전을 기준으로 Elasticsearch의 버전이 갈렸기 때문인데, 관련된 내용이 궁금하시면 AWS와 Elastic의 대립 관련된 글을 찾아서 읽어보시길 추천합니다.
 
 
-### **구축 방법**
+## **구축 방법**
 
 
 본 글에서는 Windows 10 기반의 구축 방법을 설명하겠습니다. Linux에서 하는 것과 크게 다르지 않기 때문에 이 글을 읽으면 Linux에서도 쉽게 구축 가능합니다.
