@@ -20,7 +20,7 @@ title                    : "Hyo's Tech Blog"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "박효주"
-description              : "Generalist를 꿈꾸는 개발자"
+description              : "Generalist를 꿈꾸는 개발자입니다 😄"
 url                      : "https://hyojupark.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "https://github.com/hyojupark/hyojupark.github.io" # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -103,7 +103,7 @@ analytics:
 author:
   name             : "박효주"
   avatar           : "/assets/images/profile/profile.jpeg" # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "Generalist를 꿈꾸는 개발자"
+  bio              : "Generalist를 꿈꾸는 개발자입니다 😄"
   location         : "Republic of Korea"
   email            :
   links:
