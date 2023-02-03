@@ -25,6 +25,7 @@ Tetra는 Laravel Livewire와 Phoenix Liveview에서 영감을 얻어 개발한 �
 ![sample code](/assets/images/posts/2022-5-25-tistory-post-23/img-2.png){: .align-center}
 Sample code
 {: .text-center}
+<br>
 
 당연히 사용하기 위해서는 Front 코드의 이해가 필요하겠지만, 필요한 부분을 디테일하게 추가할 수 있다는 장점이 가장 좋은 것 같습니다.
 

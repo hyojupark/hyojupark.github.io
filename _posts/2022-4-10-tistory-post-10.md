@@ -22,6 +22,7 @@ BeautifulSoup은 HTML 형태의 plain text에서 특정 데이터를 추출할 �
 ![cafe image](/assets/images/posts/2022-4-10-tistory-post-10/img-1.png){: .align-center}
 **< 바람의나라: 연 커뮤니티 자유게시판 게시글 태그 확인 >**
 {: .text-center}
+<br>
 
 위를 통해 `type-list` class를 이용해 데이터를 수집할 수 있음을 알 수 있습니다. 이제 기존 방식대로 수집해보겠습니다.
 
@@ -41,6 +42,7 @@ print(article_list)
 ![devtools](/assets/images/posts/2022-4-10-tistory-post-10/img-2.png){: .align-center}
 **< Disable JavaScript 후 페이지 >**
 {: .text-center}
+<br>
 
 위 처럼 빈 껍데기만 남고 내용이 나오지 않는 것을 확인할 수 있습니다. 이것은 해당 서버에서 CSR(Client Side Rendering) 방식을 사용중이기 때문인데, 간단하게 얘기하면 웹 페이지를 호출하면 처음엔 빈 껍데기만 보내줘서 빠르게 페이지를 띄워주고 나머지 내용을 이후에 JavaScript를 이용해서 채운다고 생각하면 됩니다. 일반적인 웹 페이지 호출 시 JavaScript를 이용해서 채워지는 내용은 가져올 수 없기 때문에, 이럴 때 Selenium을 사용해야합니다.
 
@@ -51,6 +53,7 @@ Selenium은 실제 웹 드라이버를 이용해서 웹 페이지가 완전하�
 ![chrome info](/assets/images/posts/2022-4-10-tistory-post-10/img-3.png){: .align-center}
 **< Chrome 버전 확인 >**
 {: .text-center}
+<br>
 
 이제 **사용중인 버전에 맞는 Chrome Driver**를 설치하면되는데, 저는 사용중인 100.x 버전에 맞는 버전으로 설치하겠습니다. Chrome Driver는 <https://chromedriver.chromium.org/downloads>여기서 맞는 버전을 찾아 윈도우의 경우 chromedriver_win32.zip으로 다운받으면 됩니다. 그리고 압축을 불고 python 프로젝트 폴더로 옮깁니다.
 
@@ -82,6 +85,7 @@ driver를 이용해서 BeautifulSoup과 유사하게 데이터를 탐색하는�
 ![code execute](/assets/images/posts/2022-4-10-tistory-post-10/img-4.png){: .align-center}
 **< 코드 실행 결과 일부 >**
 {: .text-center}
+<br>
 
 이렇게하면 페이지 하나에 표시된 15개의 게시글을 수집할 수 있습니다. 전체 페이지의 글을 수집하기 위해서는 아래 코드를 추가해야합니다. 최종 코드는 아래와 같습니다.
 

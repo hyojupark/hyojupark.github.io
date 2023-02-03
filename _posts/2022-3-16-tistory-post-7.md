@@ -80,21 +80,24 @@ logstash를 이용해서 데이터를 적재하면 elasticsearch에서 index를 
 이제 Kibana에서 Elasticsearch에 데이터가 잘 적재되었는지 index랑 데이터를 각각 확인해보겠습니다. index는 Management > Stack Management > Data > Index Management로 들어가서 covid로 검색해 날짜별로 생성됐는지 확인합니다.
 
 ![index result](/assets/images/posts/2022-3-16-tistory-post-7/img-1.png)
-index 적재 확인
+**< index 적재 확인 >**
 {: .text-center}
+<br>
 
 이제 데이터를 확인해보겠습니다. 데이터를 확인하기 위해서는 우선 패턴을 생성해줘야합니다. Management > Stack Management > Kibana > Data Views로 들어가서 Create data view 버튼을 누르고 "covid-\*"로 패턴을 생성해줍니다. 
 
 참고로 기존의 "index pattern"이 kibana의 버전 업데이트 이후 "data view"로 변경되었습니다.
 
 ![data view](/assets/images/posts/2022-3-16-tistory-post-7/img-2.png)
-data view 생성
+**< data view 생성 >**
 {: .text-center}
+<br>
 
 이제 적재된 데이터를 확인하기 위해 Analytics > Discover로 들어갑니다. 첫번째로 날짜를 적재한 데이터 구간으로 변경해주고 좌측 컬럼에 contributor, press, title, content를 추가(마우스 hover하면 뜨는 + 클릭)해서 깔끔하게 시각화해서 확인합니다.
 
 ![discover](/assets/images/posts/2022-3-16-tistory-post-7/img-3.png)
-적재 데이터 확인 (Kibana discover)
+**< 적재 데이터 확인 (Kibana discover) >**
 {: .text-center}
+<br>
 
 여기까지 logstash를 이용해서 elasticsearch에 데이터를 적재하고 kibana에서 확인하는 과정까지 진행했습니다. 다음엔 kibana dashboard에 시각화해서 확인해보도록 하겠습니다.

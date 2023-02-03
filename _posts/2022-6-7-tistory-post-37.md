@@ -10,14 +10,9 @@ tags:
   - sort
 ---
 
-Python에서 lambda를 사용하면 함수를 추가 작성하지 않아도 돼서 편리합니다. 아래 대표적인 sort와 map 예시로 lambda 동작을 확인해 볼 수 있습니다.
+Python에서 **lambda**를 사용하면 함수를 추가 작성하지 않아도 돼서 편리합니다. 아래 대표적인 sort와 map 예시로 **lambda** 동작을 확인해 볼 수 있습니다.
 
-
- 
-
-
-
-```
+```python
 def sort_key(x):
     return x[1]
 
@@ -33,11 +28,7 @@ print(sorted(num_list, key=lambda x: x[1]))
 [('일', 1), ('이', 2), ('삼', 3), ('사', 4), ('오', 5), ('육', 6), ('칠', 7), ('팔', 8), ('구', 9)]
 ```
 
- 
-
-
-
-```
+```python
 num_list = [1, 2, 3, 4, 5]
 
 print(list(map(lambda x: x * x, num_list)))
@@ -46,6 +37,3 @@ print(list(map(lambda x: x * x, num_list)))
 # 출력
 [1, 4, 9, 16, 25]
 ```
-
- 
-

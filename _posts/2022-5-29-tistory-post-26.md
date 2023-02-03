@@ -220,6 +220,7 @@ Use a production WSGI server instead.
 service를 실행하면 flask 기반의 서버가 동작하는 것을 확인할 수 있습니다. 동작한 서버(localhost:5000)에 접속해보면 swagger 기반으로 API 상세를 확인해볼 수 있습니다.
 
 ![swagger ui](/assets/images/posts/2022-5-29-tistory-post-26/img-2.png){: .align-center}
+<br>
 
 위 방식은 flask 실행 문구에서도 알 수 있듯이 development server이고, production deployment를 위해서는 아래 명령어를 실행하면 됩니다.
 

@@ -117,5 +117,6 @@ elasticsearch.ssl.verificationMode: certificate
 ![login page](/assets/images/posts/2022-4-14-tistory-post-12/img-1.png){: .align-center}
 **< Kibana 로그인 화면 >**
 {: .text-center}
+<br>
 
 로그인은 elastic 계정으로 접속해야 이전과 동일한 화면을 볼 수 있습니다. 

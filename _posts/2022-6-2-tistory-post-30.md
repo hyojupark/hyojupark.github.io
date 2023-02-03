@@ -14,6 +14,7 @@ Elasticsearch에서 document update 시 아래 그림처럼 업데이트할 docu
 ![](/assets/images/posts/2022-6-2-tistory-post-30/img-1.png){: .align-center}
 **< Document update >**
 {: .text-center}
+<br>
 
 메모리에는 version=2 document를 올려놓지만 version=1이 바로 삭제되지 않고 불용처리만 합니다. delete할 때도 똑같이 동작하는데, 이것은 Elasticsearch의 segment가 불변(immutable)의 특성을 가지고 있어 데이터를 업데이트하지 않기 때문입니다.
 
@@ -22,12 +23,14 @@ Elasticsearch에서 document update 시 아래 그림처럼 업데이트할 docu
 ![](/assets/images/posts/2022-6-2-tistory-post-30/img-2.png){: .align-center}
 **< 출처: https://fdv.github.io/running-elasticsearch-fun-profit/003-about-lucene/003-about-lucene.html >**
 {: .text-center}
+<br>
 
 예를 들어 아래 그림처럼 document들이 segment에 쌓여있을 경우의 segment merge 과정을 살펴보겠습니다.
 
 ![](/assets/images/posts/2022-6-2-tistory-post-30/img-3.png){: .align-center}
 **< Segment merge 과정 >**
 {: .text-center}
+<br>
 
 쉽게 생각하면 불용처리된 document를 전부 제거해서 새로운 segment를 만들어 저장하고 기존 segment를 삭제한다고 생각하면 됩니다. 이렇게 하면 읽고 쓰는 속도를 보장하면서 탐색 속도를 함께 보장할 수 있게 됩니다. Lucene은 순차적으로 모든 segment를 탐색하기 때문에 segment merge를 통해 segment 수를 줄여서 탐색 속도를 보장합니다.
 

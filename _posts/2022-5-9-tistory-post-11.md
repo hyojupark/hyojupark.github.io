@@ -26,12 +26,14 @@ CSR(Client Side Rendering) 방식을 사용하는 서버에서는 주로 Templat
 ![devtools](/assets/images/posts/2022-5-9-tistory-post-11/img-1.png){: .align-center}
 **< DevTools Network 화면 >**
 {: .text-center}
+<br>
 
 그 다음 이 전에 데이터를 수집했던 곳인 바람의나라: 연 커뮤니티의 자유게시판(https://forum.nexon.com/baramy/board_list?board=261)에 접속해봅니다. 아래처럼 몇 가지 결과가 나오는데, 하나 하나 클릭하면서 Preview를 눌러보면 페이지를 구성하기 위해 호출한 API의 데이터를 확인할 수 있습니다. 지금 데이터를 수집하기 위해 필요한 것은 "threads?alias=baramy"으로 시작하는 것입니다. 필요한 것이 무엇인지 확인하려면 하나 하나 클릭해서 필요한 데이터가 있는지 직접 다 확인해봐야합니다. 클릭해서 아래처럼 일치하는 데이터가 찾아지면 잘 찾은 것입니다.
 
 ![devtools search](/assets/images/posts/2022-5-9-tistory-post-11/img-2.png){: .align-center}
 **< 글 제목으로 일치하는 데이터 확인 >**
 {: .text-center}
+<br>
 
 이제 API를 호출하는 방법을 확인하겠습니다. 아래와 같이 우클릭해서 Copy에 "Copy as cURL (bash)"를 클릭합니다.
 

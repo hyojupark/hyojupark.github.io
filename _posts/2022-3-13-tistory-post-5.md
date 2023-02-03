@@ -49,8 +49,9 @@ C:\ELK Stack> bin\elasticsearch.bat
 ```
 
 ![](/assets/images/posts/2022-3-13-tistory-post-5/img-1.png)
-< Elasticsearch 실행 화면 >
+**< Elasticsearch 실행 화면 >**
 {: .text-center}
+<br>
 
 사진에 표시한 부분을 보면 기존에 설치되어있는 JDK를 무시하고 Elasticsearch 폴더에 있는 JDK를 사용하는 것을 볼 수 있습니다. Elasticsearch에 설치된 JDK 버전은 17.0.2 버전입니다.
 
@@ -87,15 +88,17 @@ C:\ELK Stack\kibana-8.1.0> bin\kibana.bat
 브라우저로 localhost:5601에 접속해서 아래 화면과 같이 뜨면 성공적으로 실행된 것입니다.
 
 ![](/assets/images/posts/2022-3-13-tistory-post-5/img-2.png)
-< Kibana 첫 실행 화면 >
+**< Kibana 첫 실행 화면 >**
 {: .text-center}
+<br>
 
 Elasticsearch와 연동이 잘 되었는지 확인해보도록 하겠습니다. 'Explore on my own'을 누르고 우측 탭을 눌러 'Management'에 'Stack Monitoring'을 들어갑니다. 여기서 **Metricbeat** 없이 X-Pack으로 Monitoring 해볼 것이기 때문에 'Or. set up with self monitoring'을 누르고 'xpack.monitoring.collection.enabled'  옵션이 켜지도록 'Turn on monitoring' 버튼을 누릅니다.
 
 이제 아래 화면을 통해 Elasticsearch가 잘 연동된 것을 확인할 수 있습니다.
 
 ![](/assets/images/posts/2022-3-13-tistory-post-5/img-3.png)
-< Kibana monitoring 화면 > 
+**< Kibana monitoring 화면 > **
 {: .text-center}
+<br>
 
 여기까지 확인했으면 ELK Stack이 잘 구축된 것입니다. 다음엔 logstash를 이용해 Elasticsearch에 데이터를 적재해보겠습니다.

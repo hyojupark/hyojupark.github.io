@@ -27,6 +27,7 @@ bin\elasticsearch-plugin install analysis-nori
 이제 index를 생성할 때 analyzer가 적용되도록 해야하는데, 그 전에 기존에 생성된 mappings 정보를 복사해옵니다. Stack Management > Index Management에서 만든 covid-* index 하나를 선택해서 Mappings에 있는 값을 복사합니다.
 
 ![index mapping](/assets/images/posts/2022-5-9-tistory-post-16/img-1.png){: .align-center}
+<br>
 
 이 상태에서 analyzer 설정을 이어서 작성해보겠습니다. 작성한 설정을 elasticsearch에 conf.d 폴더를 생성해서 json 파일로 저장해놓겠습니다. 만들어진 파일 내용은 아래와 같습니다.
 
@@ -182,18 +183,21 @@ lowercase는 대소문자 구분 없이 단어를 카운팅할 수 있도록 전
 ![logistics setting](/assets/images/posts/2022-5-9-tistory-post-16/img-2.png){: .align-center}
 **< Index template의 Logistics 설정 >**
 {: .text-center}
+<br>
 
 그리고 Index settings로 넘어가 아래와 같이 위 설정 파일의 "settings" > "index" 부분을 붙여넣습니다.
 
 ![index setting](/assets/images/posts/2022-5-9-tistory-post-16/img-3.png){: .align-center}
 **< Index template의 index 설정 >**
 {: .text-center}
+<br>
 
 그 다음 Mappings로 넘어가 Load JSON 버튼을 누르고 설정 파일의 "mappings" 부분을 붙여넣습니다. 그러면 자동으로 아래와 같이 mappings 정보가 입력됩니다.
 
 ![mappings setting](/assets/images/posts/2022-5-9-tistory-post-16/img-4.png){: .align-center}
 **< Index template의 mappings 설정 >**
 {: .text-center}
+<br>
 
 이제 마지막으로 넘어가 저장을 누르면 만든 nori-covid-template이 생성된 것을 볼 수 있습니다. 이제 기존에 만들어진 covid-* index를 모두 지우고 이전에 사용했던 방식과 같이 logstash를 이용해 데이터를 다시 넣습니다. Index 삭제는 Stack Management > Index Management에서 covid로 검색해서 나오는 index를 모두 삭제하면 편합니다.
 
@@ -206,6 +210,7 @@ lowercase는 대소문자 구분 없이 단어를 카운팅할 수 있도록 전
 ![tag cloud](/assets/images/posts/2022-5-9-tistory-post-16/img-6.png){: .align-center}
 **< Tag cloud 설정 화면 >**
 {: .text-center}
+<br>
 
 stop_custom_filter에 "코로나"를 추가했기 때문에 "코로나"라는 단어가 가운데 크게 나오지 않은 것을 볼 수 있습니다. 이제 위에 Save and return을 누르면 Word Cloud 시각화가 추가된 것을 볼 수 있습니다.
 

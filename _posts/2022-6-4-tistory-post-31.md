@@ -11,12 +11,9 @@ tags:
 
 BentoML에서 저장한 Artifact를 찾아서 특정 위치에 저장
 
-
 * Artifact를 가져다 쓸 때 복사가 아닌 해당 명령어를 활용
 
-
-
-```
+```bash
 user@ubuntu:~$ bentoml list
 BENTO_SERVICE AGE APIS ARTIFACTS LABELS
 IrisClassifier:20220529214648_3B586F 5 days and 18 hours predict<DataframeInput:DefaultOutput> model<SklearnModelArtifact>
@@ -49,6 +46,3 @@ iris_latest_artifact/
 
 4 directories, 14 files
 ```
-
- 
-
