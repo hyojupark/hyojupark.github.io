@@ -10,14 +10,9 @@ tags:
   - uncordon
 ---
 
-Kubernetes에서 node가 scheduling을 하지 못하는 경우 아래와 같이 uncordon으로 해결 가능합니다.
+Kubernetes에서 node가 **scheduling을 하지 못하는 경우** 아래와 같이 `uncordon`으로 해결 가능합니다.
 
-
- 
-
-
-
-```
+```bash
 $ kubectl get nodes
 NAME	STATUS				ROLES	AGE	VERSION
 node1	Ready,SchedulingDisabled	master	220m	v1.19.15
@@ -29,6 +24,3 @@ $ kubectl get nodes
 NAME	STATUS	ROLES	AGE	VERSION
 node1	Ready	master	220m	v1.19.15
 ```
-
- 
-
