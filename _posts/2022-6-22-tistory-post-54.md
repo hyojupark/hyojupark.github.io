@@ -11,11 +11,8 @@ tags:
   - statefulset
 ---
 
-
-
-|  |  |
-| --- | --- |
 | **Controller** | **설명** |
+| --- | --- |
 | Deployment | - 내부에서 Replicaset으로 pod를 관리하는 컨트롤러- Rollback, 무중단 배포 가능 |
 | ReplicaSet | - 동일한 pod를 n개로 복제해서 관리하는 컨트롤러- Load balance, Scale out 가능 |
 | DaemonSet | - 노드별로 pod를 하나씩만 관리하는 컨트롤러- 모니터링, 로그 수집 등에서 사용 |

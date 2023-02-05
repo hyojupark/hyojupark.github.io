@@ -13,31 +13,17 @@ tags:
   - sklearn
 ---
 
-sklearn의 confusion\_matrix와 classification\_report를 사용하면 confusion matrix 출력과 함께 precision, recall, f1-score를 쉽게 계산할 수 있습니다.
+`sklearn`의 `confusion_matrix`와 `classification_report`를 사용하면 `confusion matrix` 출력과 함께 `precision`, `recall`, `f1-score`를 쉽게 계산할 수 있습니다.
 
+## **sklearn 설치**
 
- 
-
-
-### **sklearn 설치**
-
-
-
-```
+```bash
 pip install sklearn
 ```
 
- 
+## **코드 예시**
 
-
- 
-
-
-### **코드 예시**
-
-
-
-```
+```python
 from sklearn.metrics import confusion_matrix, classification_report 
 
 true_label = [1, 1, 0, 0, 1, 1, 2, 2, 0, 1, 2, 1, 2, 1, 0, 2, 1, 1, 1, 0, 0, 0, 1]
@@ -66,41 +52,29 @@ print(metric)
 weighted avg       0.83      0.83      0.83        23
 ```
 
-true\_label과 pred\_label같이 모델의 Inference 결과가 나왔다고 가정합니다. label이 0, 1, 2 3개일 때 각각 label의 precision, recall, f1-score, support가 정리돼서 출력되는 것을 볼 수 있습니다. support는 true\_label의 각 label 별 수량이고, 나머지 metric은 아래 수식을 참고 바랍니다.
+`true_label`과 `pred_label`같이 모델의 Inference 결과가 나왔다고 가정합니다. label이 0, 1, 2 3개일 때 각각 label의 `precision`, `recall`, `f1-score`, `support`가 정리돼서 출력되는 것을 볼 수 있습니다. `support`는 `true_label`의 각 label 별 수량이고, 나머지 metric은 아래 수식을 참고 바랍니다.
 
+## **Metric**
 
- 
+![](/assets/images/posts/2022-7-1-tistory-post-69/img-1.png){: .align-center}
+**< Metric 별 수식 >**
+{: .text-center}
 
+![](/assets/images/posts/2022-7-1-tistory-post-69/img-2.png){: .align-center}
+**< Precision 예시 >**
+{: .text-center}
 
- 
+![](/assets/images/posts/2022-7-1-tistory-post-69/img-3.png){: .align-center}
+**< Recall 예시 >**
+{: .text-center}
 
+<br>
 
-### **Metric**
+## **classification_report 활용 (dictionary 변환)**
 
+위 코드를 그대로 사용하면 문자열로 반환되기 때문에 활용이 어렵습니다. 이를 `output_dict=True` 파라미터를 추가해서 dictionary로 변환하면 활용이 가능합니다.
 
-![](/assets/images/posts/2022-7-1-tistory-post-69/img-1.png)Metric 별 수식
-
-![](/assets/images/posts/2022-7-1-tistory-post-69/img-2.png)Precision 예시
-
-![](/assets/images/posts/2022-7-1-tistory-post-69/img-3.png)Recall 예시
-
-
-
-
- 
-
-
- 
-
-
-### **classification\_report 활용 (dictionary 변환)**
-
-
-위 코드를 그대로 사용하면 문자열로 반환되기 때문에 활용이 어렵습니다. 이를 output\_dict=True 파라미터를 추가해서 dictionary로 변환하면 활용이 가능합니다.
-
-
-
-```
+```python
 from pprint import pprint
 
 from sklearn.metrics import classification_report
@@ -134,9 +108,3 @@ pprint(metric)
                   'recall': 0.8260869565217391,
                   'support': 23}}
 ```
-
- 
-
-
- 
-

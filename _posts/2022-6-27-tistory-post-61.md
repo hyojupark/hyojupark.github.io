@@ -10,11 +10,9 @@ tags:
   - \N
 ---
 
-Python의 print는 기본적으로 개행을 해주기 때문에 여러 개의 print를 사용하면 아래와 같이 출력됩니다.
+Python의 `print`는 기본적으로 개행을 해주기 때문에 여러 개의 `print`를 사용하면 아래와 같이 출력됩니다.
 
-
-
-```
+```python
 for i in range(5):
     print(i)
     
@@ -27,14 +25,9 @@ for i in range(5):
 4
 ```
 
- 
+여기서 print에 `end=''` 값을 주면 개행 없이 출력이 가능합니다.
 
-
-여기서 print에 end='' 값을 주면 개행 없이 출력이 가능합니다.
-
-
-
-```
+```python
 for i in range(5):
     print(i, end='')
     
@@ -43,17 +36,9 @@ for i in range(5):
 01234
 ```
 
- 
+Python `print` 함수의 `end` default 값이 `'\n'`인 부분이기 때문에 개행인 부분을 `''`으로 바꾸면 위와 같이 개행 없이 출력이 가능합니다. `''` 말고 다른 문자를 넣어서 활용도 가능합니다.
 
-
-Python print 함수의 end default 값이 '\n'인 부분이기 때문에 개행인 부분을 ''으로 바꾸면 위와 같이 개행 없이 출력이 가능합니다. '' 말고 다른 문자를 넣어서 활용도 가능합니다.
-
-
- 
-
-
-
-```
+```python
 def print(self, *args, sep=' ', end='\n', file=None): # known special case of print
     """
     print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
@@ -67,6 +52,3 @@ def print(self, *args, sep=' ', end='\n', file=None): # known special case of pr
     """
     pass
 ```
-
- 
-

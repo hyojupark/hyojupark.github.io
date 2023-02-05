@@ -9,11 +9,9 @@ tags:
   - Python
 ---
 
-enumerate를 이용하면 for loop에서 index를 사용할 수 있습니다.
+`enumerate`를 이용하면 for loop에서 index를 사용할 수 있습니다.
 
-
-
-```
+```python
 fruit_list = ['apple', 'banana', 'grape', 'tomato', 'melon']
 
 for n, fruit in enumerate(fruit_list):
@@ -28,14 +26,9 @@ for n, fruit in enumerate(fruit_list):
 4 melon
 ```
 
- 
-
-
 아래와 같이 start index를 조정해서 사용도 가능합니다.
 
-
-
-```
+```python
 fruit_list = ['apple', 'banana', 'grape', 'tomato', 'melon']
 
 for n, fruit in enumerate(fruit_list, start=1):
