@@ -7,24 +7,16 @@ tags:
   - airflow
   - clear
   - DAG
-  - TASK
+  - Task
 ---
 
 Airflow Web UI에서도 task를 clear할 수 있지만, task의 양이 많거나 명령어를 이용해서 자동화하고 싶은 경우 아래 명령어를 이용해서 clear가 가능합니다.
 
-
- 
-
-
-
-```
+```bash
 $ airflow tasks clear {dag_id} -t {task regex} -s 2022-07-10T20:00:00+09:00 -e 2022-07-17T20:00:00+09:00
 ```
 
- 
-
-
-* **dag\_id**
+* **dag_id**
 	+ clear할 dag id
 * **-t, --task-regex**
 	+ 재실행할 tasks의 regular expression
@@ -41,12 +33,7 @@ $ airflow tasks clear {dag_id} -t {task regex} -s 2022-07-10T20:00:00+09:00 -e 2
 * **-f, --only-failed**
 	+ 실패한 jobs만 clear (default: false)
 
-
- 
-
-
- 
-
+<br>
 
 **Reference**
 

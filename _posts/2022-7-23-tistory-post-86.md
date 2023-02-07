@@ -13,37 +13,21 @@ tags:
   - pytorch
 ---
 
-본 예제는 Anaconda 없이 pip requirements를 가지고 MLflow pytorch example을 진행하는 방법에 대해 작성하였습니다.
-
+본 예제는 Anaconda 없이 <u>pip requirements를 가지고 MLflow pytorch example을 진행하는 방법</u>에 대해 작성하였습니다.
 
 (pyenv dependency로 인해 윈도우에서는 진행이 불가능합니다.)
 
+## **예제 코드(파일)**
 
- 
+예제 코드는 <https://github.com/mlflow/mlflow/tree/master/examples/pytorch/MNIST>의 코드를 그대로 가져와서 `MLproject`와 `.yaml`만 수정해서 사용했습니다.
 
+### **1. mnist_autolog_example.py**
 
- 
+* 예제 코드 그대로 사용 (아래 `코드 보기` 클릭)
 
+<details><summary markdown="span">코드 보기</summary>
 
-### **예제 코드(파일)**
-
-
-예제 코드는 <https://github.com/mlflow/mlflow/tree/master/examples/pytorch/MNIST>의 코드를 그대로 가져와서 MLproject와 .yaml만 수정해서 사용했습니다.
-
-
- 
-
-
-**1. mnist\_autolog\_example.py**
-
-
-* 예제 코드 그대로 사용 (코드 확인은 아래 더보기 클릭)
-
-
-더보기
-
-
-```
+```python
 #
 # Trains an MNIST digit recognizer using PyTorch Lightning,
 # and uses Mlflow to log metrics, params and artifacts
@@ -370,21 +354,16 @@ if __name__ == "__main__":
     trainer.fit(model, dm)
     trainer.test(datamodule=dm)
 ```
+</details>
 
+<br>
 
+### **2. MLproject**
 
- 
+* MLproject의 env는 conda_env(**conda**)와 python_env(**pip**) 2개를 지원합니다. (<https://www.mlflow.org/docs/latest/models.html#additional-logged-files>)
+* conda_env 부분을 python_env로 변경
 
-
-**2. MLproject**
-
-
-* MLproject의 env는 conda\_env(conda)와 python\_env(pip) 2개를 지원합니다. (<https://www.mlflow.org/docs/latest/models.html#additional-logged-files>)
-* conda\_env 부분을 python\_env로 변경
-
-
-
-```
+```yaml
 name: mnist-autolog-example
 
 python_env: python_env.yaml
@@ -417,18 +396,14 @@ entry_points:
             --es_monitor {monitor}
 ```
 
- 
+<br>
 
+### **3. python_env.yaml**
 
-**3. python\_env.yaml**
+* **python version**과 `pip`, `setuptools`, `wheel과` 같은 **build dependencies version**을 작성하고 나머지 **packages version**은 `requirements.txt`에 작성합니다.
+* **python version**만 빼고 나머지(build dependencies, requirements)는 예제 코드와 동일한 version을 사용했습니다.
 
-
-* python version과 pip, setuptools, wheel과 같은 build dependencies version을 작성하고 나머지 packages version은 requirements.txt에 작성합니다.
-* python version만 빼고 나머지(build dependencies, requirements)는 예제 코드와 동일한 version을 사용했습니다.
-
-
-
-```
+```yaml
 python: 3.7.5
 build_dependencies:
   - pip==21.1.3
@@ -438,14 +413,9 @@ dependencies:
   - -r requirements.txt
 ```
 
- 
+### **4. requirements.txt**
 
-
-**4. requirements.txt**
-
-
-
-```
+```r
 mlflow>=1.17.0
 torch==1.9.0
 torchvision>=0.9.1
@@ -453,49 +423,28 @@ pytorch-lightning==1.6.1
 protobuf<4.0.0
 ```
 
- 
+이렇게 `mnist_autolog_example.py`, `MLproject`, `python_env.yaml`, `requirements.txt` 4개의 예제 코드(파일)을 작성했습니다.
 
+<br>
 
-이렇게 mnist\_autolog\_example.py, MLproject, python\_env.yaml, requirements.txt 4개의 예제 코드(파일)을 작성했습니다.
+## **pyenv 설치**
 
+MLflow의 **python_env**를 사용하기 위해서는 `pyenv`를 설치해야합니다.  우선 `pyenv` 설치에 필요한 dependencies를 설치합니다.
 
- 
-
-
- 
-
-
-### **pyenv 설치**
-
-
-MLflow의 python\_env를 사용하기 위해서는 pyenv를 설치해야합니다.  우선 pyenv 설치에 필요한 dependencies를 설치합니다.
-
-
-
-```
+```bash
 $ sudo apt install git build-essential libreadline-dev zlib1g-dev libbz2-dev \
 libsqlite3-dev libssl-dev liblzma-dev
 ```
 
- 
+그리고 `pyenv`를 `git`으로 설치합니다.
 
-
-그리고 pyenv를 git으로 설치합니다.
-
-
-
-```
+```bash
 $ git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 ```
 
- 
+`pyenv`를 환경변수에 추가합니다.
 
-
-pyenv를 환경변수에 추가합니다.
-
-
-
-```
+```bash
 $ vi ~/.bashrc
 
 # 맨 밑에 아래 코드 추가
@@ -504,61 +453,32 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 ```
 
- 
+그리고 터미널을 재실행합니다. (`source ~/.bashrc`를 해도 되지만 저는 `virtualenv`에서 `pyenv` 설정 적용이 안됐습니다..)
 
+<br>
 
-그리고 터미널을 재실행합니다. (source ~/.bashrc를 해도 되지만 저는 virtualenv에서 pyenv 설정 적용이 안됐습니다..)
-
-
- 
-
-
- 
-
-
-### **MLflow 프로젝트 실행**
-
+## **MLflow 프로젝트 실행**
 
 이제 작성한 코드를 실행하도록 하겠습니다. 작성한 코드가 있는 디렉토리에서 아래 명령어를 입력하면 바로 프로젝트(학습)가 시작됩니다.
 
-
-
-```
+```bash
 pytorch_example$ mlflow run .
 ```
 
- 
+프로젝트는 가상환경에 <u>1) python 설치</u>, <u>2) build_dependencies 설치</u>, <u>3) requirements 설치</u>, <u>4) python 학습 코드 실행</u>, <u>5) 결과 출력</u> 순으로 진행되면서 아래와 같이 출력되면 성공적으로 진행된 것입니다.
 
+![mlflow project execute](/assets/images/posts/2022-7-23-tistory-post-86/img-1.png){: .align-center}
+**mlflow project 실행 결과**
+{: .text-center}
 
-프로젝트는 가상환경에 python 설치, build\_dependencies 설치, requirements 설치, python 학습 코드 실행, 결과 출력 순으로 진행되면서 아래와 같이 출력되면 성공적으로 진행된 것입니다.
+<br>
 
+**MLflow UI**에 접속해보면 아래와 같이 **Artifact**가 정상적으로 생성된 것을 확인할 수 있습니다.
 
-![mlflow project execute](/assets/images/posts/2022-7-23-tistory-post-86/img-1.png)mlflow project 실행 결과
-
-
-
-
- 
-
-
-MLflow UI에 접속해보면 아래와 같이 Artifact가 정상적으로 생성된 것을 확인할 수 있습니다.
-
-
-
-```
+```bash
 pytorch_example$ mlflow ui
 ```
 
-![mlflow ui](/assets/images/posts/2022-7-23-tistory-post-86/img-2.png)MLflow UI
-
-
-
-
- 
-
-
- 
-
-
- 
-
+![mlflow ui](/assets/images/posts/2022-7-23-tistory-post-86/img-2.png){: .align-center}
+**MLflow UI**
+{: .text-center}
