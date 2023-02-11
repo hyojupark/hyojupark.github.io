@@ -7,29 +7,20 @@ tags:
   - copy
   - directory
   - File
-  - k8s
   - kubernetes
-  - POD
+  - Pod
 ---
 
 ### **local to pod**
 
-
-
-```
+```bash
 kubectl cp /copy/local_dir {namespace}/{pod-name}:/copy/pod_dir
 ```
 
- 
-
+<br>
 
 ### **pod to local**
 
-
-
-```
+```bash
 kubectl cp {namespace}/{pod-name}:/copy/pod_dir /copy/local_dir
 ```
-
- 
-
