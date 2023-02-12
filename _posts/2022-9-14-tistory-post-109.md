@@ -12,33 +12,16 @@ tags:
   - SWAGGER
 ---
 
-FastAPI를 ingress에 연결해서 사용하고 싶은 경우 추가 경로 설정이 필요합니다.
-
-
- 
-
+**FastAPI**를 ingress에 연결해서 사용하고 싶은 경우 추가 경로 설정이 필요합니다.
 
 1. Kubernetes Ingress 설정
-2. root\_path 설정 (Swagger UI 연결용)
+2. root_path 설정 (Swagger UI 연결용)
 
+여기서는 ingress base 경로를 `/api/v1/app_name`으로 잡고 진행하겠습니다.
 
- 
+## **1. Kubernetes Ingress 설정**
 
-
-여기서는 ingress base 경로를 **/api/v1/app\_name**으로 잡고 진행하겠습니다.
-
-
- 
-
-
- 
-
-
-### **Kubernetes Ingress 설정**
-
-
-
-```
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -60,23 +43,16 @@ spec:
                 number: 5000
 ```
 
-위에서 중요하게 봐야하는 설정은 **.metadata.annotations.nginx.ingress.kubernetes.io/rewrite-target** 부분과 **.spec.rules.http.paths.path**입니다. 위와 같이 적용해야 **/api/v1/app\_name/test**를 **/test**로 요청해 처리할 수 있습니다.
+위에서 중요하게 봐야하는 설정은 `.metadata.annotations.nginx.ingress.kubernetes.io/rewrite-target` 부분과 `.spec.rules.http.paths.path`입니다. 위와 같이 적용해야 `/api/v1/app_name/test`를 `/test`로 요청해 처리할 수 있습니다.
+
+<br>
+
+## **2. root_path 설정**
 
 
- 
+**root_path** 설정을 생략해도 API는 동작하지만, **Swagger UI**를 보기 위해서는 설정이 필요합니다. 
 
-
- 
-
-
-### **root\_path 설정**
-
-
-root\_path 설정을 생략해도 API는 동작하지만, Swagger UI를 보기 위해서는 설정이 필요합니다. 
-
-
-
-```
+```python
 from fastapi import FastAPI
 
 
@@ -88,11 +64,4 @@ def test():
 return 'testing'
 ```
 
- 
-
-
- 
-
-
-위 설정을 적용해서 Kubernetes에 배포 후 ingress가 연결된 주소에서 **/api/v1/app\_name/docs**를 요청하면 Swagger UI가 뜨고 **/api/v1/app\_name/test**를 요청하면 testing이 출력되는 것을 확인할 수 있습니다.
-
+위 설정을 적용해서 Kubernetes에 배포 후 ingress가 연결된 주소에서 `/api/v1/app_name/docs`를 요청하면 **Swagger UI**가 뜨고 `/api/v1/app_name/test`를 요청하면 testing이 출력되는 것을 확인할 수 있습니다.
