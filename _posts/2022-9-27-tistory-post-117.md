@@ -16,58 +16,36 @@ tags:
 
 Airflow Variables를 이용하면 Kubernetes의 ConfigMap, Secret와 유사하게 key, value를 관리할 수 있습니다.
 
+## **Airflow Variables 추가하기**
 
- 
+Airflow webserver에 접속하면 `Admin > Variables`에서 쉽게 추가할 수 있기 때문에 자세한 설명은 생략하겠습니다. 아래 AWS 관련 Key 2개를 추가했습니다.
 
+![](/assets/images/posts/2022-9-27-tistory-post-117/img-1.png){: .align-center}
+**List Variable**
+{: .text-center}
 
-### **Airflow Variables 추가하기**
+<br>
 
+## **Variables 사용하기**
 
-Airflow webserver에 접속하면 Admin > Variables에서 쉽게 추가할 수 있기 때문에 자세한 설명은 생략하겠습니다. 아래 AWS 관련 Key 2개를 추가했습니다.
+Airflow에서 Variables를 사용할 때는 **Jinja template**에 맞춰 사용하면 됩니다. Variables는 `var.value`에 담겨있습니다.
 
-
- 
-
-
-![](/assets/images/posts/2022-9-27-tistory-post-117/img-1.png)List Variable
-
-
-
-
- 
-
-
- 
-
-
-### **Variables 사용하기**
-
-
-Airflow에서 Variables를 사용할 때는 Jinja template에 맞춰 사용하면 됩니다. Variables는 **var.value**에 담겨있습니다.
-
-
-
-```
+```python
 ...
     aws_access_key_id = '{{ var.value.AWS_ACCESS_KEY_ID }}'
     aws_secret_access_key = '{{ var.value.AWS_SECRET_ACCESS_KEY }}'
 ...
 ```
 
- 
+<br>
 
+## **Kubernetes 환경 변수로 추가하기**
 
- 
-
-
-### **Kubernetes 환경 변수로 추가하기**
-
-
-Airflow의 KubernetesPodOperator를 이용해서 실행할 때 위에서 설정한 값을 아래와 같은 방법으로 환경 변수에 추가할 수 있습니다.
+Airflow의 **KubernetesPodOperator**를 이용해서 실행할 때 위에서 설정한 값을 아래와 같은 방법으로 환경 변수에 추가할 수 있습니다.
 
 
 
-```
+```python
 from kubernetes.client import models as k8s
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 
@@ -89,6 +67,3 @@ from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import Kubernete
         get_logs=True
     )
 ```
-
- 
-
