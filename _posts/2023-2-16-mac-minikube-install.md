@@ -7,12 +7,12 @@ tags:
   - minkube
 ---
 
-금방 따라할 줄 알았던 **Minikube** 설치 과정이 1~2시간 이상 걸려버려서 기록으로 남깁니다.. 비슷한 이슈가 있는 분들에게 참고가 됐으면 좋겠습니다.
+금방 할 줄 알았던 **Minikube** 설치에서 삽질하는 과정이 너무 길어져서 기록으로 남깁니다.. 비슷한 이슈가 있는 분들에게 참고가 됐으면 좋겠습니다.
 
 
 ## 설치
 
-아래 과정을 거쳐 **Minikube**와 필요한 것들을 설치합니다.
+아래 과정을 거쳐 **Minikube**와 필요한 것들을 설치합니다. Minikube VM을 띄울 가상환경 driver로 `HyperKit`을, Minikube에서 사용할 container로 `Docker`를 설치합니다.
 
 ```zsh
 % brew install hyperkit
@@ -24,7 +24,7 @@ tags:
 <br>
 
 ## 셋업
-미리 CPU와 Memory를 여유있게 설정하고 minikube를 시작합니다. 현재(2023.02.16) 기준 최신 버전인 1.26.1로 설치 시 오류가 발생해, 1.23.1로 낮은 버전을 지정해서 설치했습니다.
+미리 CPU와 Memory를 여유있게 설정하고 minikube를 시작합니다. 현재(2023.02.16) 기준 최신 버전인 1.26.1로 설치 시 오류가 발생해, 설치했던 reference를 참고해 1.23.1로 버전을 낮춰서 설치했습니다.
 
 ```zsh
 % minikube config set cpus 6
@@ -60,12 +60,14 @@ Password:
 🏄  끝났습니다! kubectl이 "minikube" 클러스터와 "default" 네임스페이스를 기본적으로 사용하도록 구성되었습니다.
 ```
 
-중간에 `hyperkit` 관련 이슈는 아래에서 이어서 처리하겠습니다.
+중간에 `HyperKit` Permission 관련 이슈를 볼 수 있는데, 이 부분은 아래 확인 부분에서 이어서 진행하겠습니다.
 
 <br>
 
 ## 확인
-kubectl 명령어가 바로 사용되지 않아 minikube에서 진행했습니다.
+kubectl 명령어가 바로 사용되지 않아 minikube에서 kubectl을 사용했습니다. (사소한 이슈같아 이 부분은 그냥 넘어갔습니다.)
+
+아래와 같이 버전 정보와 component 상태를 확인합니다.
 
 ```zsh
 % minikube kubectl version
@@ -83,11 +85,15 @@ controller-manager   Healthy   ok
 
 <br>
 
-마지막으로 대시보드까지 확인되면 끝입니다. 대시보드를 확인하기 위해선 우선 위 `minikube start` 과정에서 나온 이슈를 처리하고 `minikube dashboard`를 실행합니다.
+마지막으로 **대시보드**까지 확인되면 끝입니다. **대시보드**를 확인하기 위해선 먼저 위 `minikube start` 과정에서 발생한 이슈를 처리하고 `minikube dashboard`를 실행합니다. **대시보드** 웹 페이지가 바로 뜨면 성공입니다.
 ```zsh
 % sudo chown root:wheel /Users/hyojupark/.minikube/bin/docker-machine-driver-hyperkit 
 % sudo chmod u+s /Users/hyojupark/.minikube/bin/docker-machine-driver-hyperkit 
 % minikube dashboard
+🤔  Verifying dashboard health ...
+🚀  Launching proxy ...
+🤔  Verifying proxy health ...
+...
 ```
 
 <br>
