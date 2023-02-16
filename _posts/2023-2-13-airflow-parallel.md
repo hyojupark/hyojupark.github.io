@@ -56,7 +56,7 @@ DAG가 시작되면 위 `max_active_runs`에서 설명한 것 처럼 `max_active
 
 동시에 처리되는 Task는 아래 그림처럼 **<u>하나의 Run</u>**<u>에서 동시 처리될 Task의 수</u> 이기도 하고, **<u>여러 Run</u>**<u>에 걸쳐 동시 처리될 Task의 수</u> 이기도 합니다.
 
-![image](/assets/images/posts/2023-2-9-airflow-parallel/dag_active_tasks_example1.png){: .align-center width="70%"}
+![image](/assets/images/posts/2023-2-13-airflow-parallel/dag_active_tasks_example1.png){: .align-center width="70%"}
 
 #### # 추천 설정
 이 값은 Backfill을 하지 않을 경우엔 하나의 Run에서 병렬처리되는 Task 수 만큼, Backfill을 고려한다면 Airflow Queue가 전부 사용되지 않는 선에서 적당한 값을 설정하는게 좋습니다.
@@ -74,7 +74,7 @@ DAG가 시작되면 위 `max_active_runs`에서 설명한 것 처럼 `max_active
 #### # 설명
 `parallelism`은 Airflow의 **Queue 크기**를 의미한다고 생각하면 됩니다. 아래 예시 그림으로 설명하겠습니다.
 
-![image](/assets/images/posts/2023-2-9-airflow-parallel/airflow_queue_example1.png){: .align-center width="70%"}
+![image](/assets/images/posts/2023-2-13-airflow-parallel/airflow_queue_example1.png){: .align-center width="70%"}
 
 그림은 `max_active_tasks`를 `2`로 설정하고, 동시 `max_active_runs`를 `4`로 설정한 DAG입니다. 보는 것과 같이 **동작중인 Task는 2개이지만, Queue에는 4개**가 들어가게 됩니다. 
 
