@@ -18,7 +18,7 @@ tags:
 
 **데이터 제공 Layer**는 데이터 소스(Data Lake, Data Warehouse) 내부의 데이터를 가공해서 서비스 애플리케이션, 분석 애플리케이션, 각종 데이터 분석 도구 등에 제공하는 Layer입니다. 이 Layer에서 데이터를 제공하기 위해 사용하는 방법으로 크게 세 가지(**RESTful API**, **Direct Connection**(ex. JDBC), **Data Forward Service**(ex. fluentbit))가 있습니다.
 
-![Data Serving Flow](/assets/images/posts/2023-1-15-tistory-post-144/img-1.png){: .align-center}
+![Data Serving Flow](/assets/images/posts/2023-1-15-comparing-each-method-in-the-data-serving-layer/img-1.png){: .align-center}
 **Data Serving Flow**
 {: .text-center}
 
