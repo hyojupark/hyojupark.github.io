@@ -12,8 +12,8 @@ tags:
 ---
 
 **이전 포스트**
-- [GitHub 블로그 생성기 (Mac 기준)]({% post_url 2023-1-26-tistory-post-147 %})
-- [minimal-mistakes jekyll 테마 적용 (근데 이제 ruby 3.2에서 생긴 오류를 곁들인)]({% post_url 2023-1-27-tistory-post-148 %})
+- [GitHub 블로그 생성기 (Mac 기준)]({% post_url 2023-1-26-create-github-blog %})
+- [minimal-mistakes jekyll 테마 적용 (근데 이제 ruby 3.2에서 생긴 오류를 곁들인)]({% post_url 2023-1-27-minimal-mistake-jekyll-theme %})
 
 ---
 

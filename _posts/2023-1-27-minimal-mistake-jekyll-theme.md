@@ -14,7 +14,7 @@ tags:
 ---
 
 **이전 포스트**
-- [GitHub 블로그 생성기 (Mac 기준)]({% post_url 2023-1-26-tistory-post-147 %})
+- [GitHub 블로그 생성기 (Mac 기준)]({% post_url 2023-1-26-create-github-blog %})
 
 ---
 
@@ -35,7 +35,7 @@ tags:
 - screenshot-layouts.png
 - screenshot.png
 
-이제 전에 생성한 repository [이전 포스트 참조]({% post_url 2023-1-26-tistory-post-147 %})에 있는 파일을 모두 지우고(.git 제외), 위 파일로 덮어줍니다.
+이제 전에 생성한 repository [이전 포스트 참조]({% post_url 2023-1-26-create-github-blog2023-1-26-create-github-blog %})에 있는 파일을 모두 지우고(.git 제외), 위 파일로 덮어줍니다.
 
 ### 오류 해결 (ruby 버전 변경)
 이제 아래 명령어를 설치하고 실행하면 되는데, 오류가 발생합니다.
