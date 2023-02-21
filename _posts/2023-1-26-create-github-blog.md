@@ -14,7 +14,7 @@ tags:
 
 ## **1. GitHub Repository 생성 및 clone**
 
-![](/assets/images/posts/2023-1-26-tistory-post-147/img-1.png)
+![](/assets/images/posts/2023-1-26-create-github-blog/img-1.png)
 
 Repository를 생성할 때 `<이름>.github.io`로 생성합니다. 이름이 다르면 안됩니다. 생성됐으면 clone까지 미리해둡니다.
 
@@ -67,5 +67,5 @@ git push origin main
 
 <이름>.github.io에 접속해서 확인!
 
-![](/assets/images/posts/2023-1-26-tistory-post-147/img-2.png)
+![](/assets/images/posts/2023-1-26-create-github-blog/img-2.png)
  

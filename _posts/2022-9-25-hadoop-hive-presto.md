@@ -15,7 +15,7 @@ tags:
   - Yarn
 ---
 
-![hadoop icon](/assets/images/posts/2022-9-25-tistory-post-114/img-1.png){: .align-center}
+![hadoop icon](/assets/images/posts/2022-9-25-hadoop-hive-presto/img-1.png){: .align-center}
 
 ## **Hadoop (데이터 저장 및 조회)**
 
@@ -28,7 +28,7 @@ tags:
 
 <br>
 
-![hive icon](/assets/images/posts/2022-9-25-tistory-post-114/img-2.png)
+![hive icon](/assets/images/posts/2022-9-25-hadoop-hive-presto/img-2.png)
 
 ## **Hive (대량의 데이터 처리에 특화된 쿼리 엔진)**
 
@@ -40,7 +40,7 @@ tags:
 
 <br>
 
-![presto icon](/assets/images/posts/2022-9-25-tistory-post-114/img-3.png)
+![presto icon](/assets/images/posts/2022-9-25-hadoop-hive-presto/img-3.png)
 
 ## **Presto (속도에 특화된 대화식 쿼리 엔진)**
 

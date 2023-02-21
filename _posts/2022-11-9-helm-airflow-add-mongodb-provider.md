@@ -59,7 +59,7 @@ $ helm upgrade airflow apache-airflow/airflow --version 1.7.0 --namespace airflo
 
 이제 airflow webserver에 들어가봅니다. `Admin > Providers`에 **apache-airflow-providers-mongo**가 추가된 것을 볼 수 있습니다. 이제 Connection을 추가합니다.
 
-![](/assets/images/posts/2022-11-9-tistory-post-132/img-1.png){: .align-center}
+![](/assets/images/posts/2022-11-9-helm-airflow-add-mongodb-provider/img-1.png){: .align-center}
 
 위에서 **Password**와 **Extra** 부분이 중요합니다.
 

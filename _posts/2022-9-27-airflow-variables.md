@@ -20,7 +20,7 @@ Airflow Variables를 이용하면 Kubernetes의 ConfigMap, Secret와 유사하�
 
 Airflow webserver에 접속하면 `Admin > Variables`에서 쉽게 추가할 수 있기 때문에 자세한 설명은 생략하겠습니다. 아래 AWS 관련 Key 2개를 추가했습니다.
 
-![](/assets/images/posts/2022-9-27-tistory-post-117/img-1.png){: .align-center}
+![](/assets/images/posts/2022-9-27-airflow-variables/img-1.png){: .align-center}
 **List Variable**
 {: .text-center}
 

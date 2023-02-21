@@ -31,7 +31,7 @@ for exp in $EXP_NAME_LIST;do
 done
 ```
 
-![execute result](/assets/images/posts/2022-11-1-tistory-post-128/img-1.png){: .align-center}
+![execute result](/assets/images/posts/2022-11-1-bash-script-string-list-loop/img-1.png){: .align-center}
 **실행 결과**
 
 MobaXTerm과 같은 툴을 사용하면 특정 문자에 Syntax가 적용돼 가독성 높게 출력도 가능합니다.

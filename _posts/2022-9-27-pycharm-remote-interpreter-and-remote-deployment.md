@@ -36,13 +36,13 @@ tags:
 
 그리고 아래 **Sync folders**를 잡아줘야 합니다. sync folders는 로컬에서 실행한 경로와 서버에서 실행될 경로를 매칭하기 위한 설정입니다. 기본적으로 잡혀있는 `/tmp`를 사용할 경우 코드를 실행할 때 마다 `/tmp` 경로에 코드를 복제 후 실행하기 때문에 경로를 상대적으로 잡아서 쓰는 파일 등의 이슈가 있다면 오류가 발생합니다. 그렇기 때문에 <u>실제로 서버에서 코드를 동작시킬 위치</u>를 잡아줍니다.
 
-![interpreter setting](/assets/images/posts/2022-9-27-tistory-post-116/img-1.png){: .align-center}
+![interpreter setting](/assets/images/posts/2022-9-27-pycharm-remote-interpreter-and-remote-deployment/img-1.png){: .align-center}
 **interpreter 설정 화면**
 {: .text-center}
 
 설정 후 Create를 누르면 Location으로 설정한 경로에 venv과 python 환경이 구축된 것을 확인할 수 있습니다.
 
-![directory tree](/assets/images/posts/2022-9-27-tistory-post-116/img-2.png){: .align-center}
+![directory tree](/assets/images/posts/2022-9-27-pycharm-remote-interpreter-and-remote-deployment/img-2.png){: .align-center}
 
 <br>
 
@@ -54,19 +54,19 @@ tags:
 
 여기서 Connection 설정을 해주면 되는데, **Type**은 **SFTP**, **SSH configuration**은 **위에서 설정한 서버 접속 정보**를 잡습니다. **Root path**는 **<u>위에서 sync folders를 설정할 때 잡은 서버 경로</u>**를 사용합니다.
 
-![Deployment connection setting](/assets/images/posts/2022-9-27-tistory-post-116/img-3.png){: .align-center}
+![Deployment connection setting](/assets/images/posts/2022-9-27-pycharm-remote-interpreter-and-remote-deployment/img-3.png){: .align-center}
 **Deployment > Connection 설정 화면**
 {: .text-center}
 
 그리고 Mappings에 **Deployment path**는 앞에 Connection 설정에서 Root path를 설정했기 때문에 `/`만 입력합니다.
 
-![deployment mappings setting](/assets/images/posts/2022-9-27-tistory-post-116/img-4.png){: .align-center}
+![deployment mappings setting](/assets/images/posts/2022-9-27-pycharm-remote-interpreter-and-remote-deployment/img-4.png){: .align-center}
 **Deployment > Mappings 설정 화면**
 {: .text-center}
 
 마지막으로 Excluded Paths에 서버에 있는 **venv를 예외처리**합니다.
 
-![deployment excluded paths setting](/assets/images/posts/2022-9-27-tistory-post-116/img-5.png){: .align-center}
+![deployment excluded paths setting](/assets/images/posts/2022-9-27-pycharm-remote-interpreter-and-remote-deployment/img-5.png){: .align-center}
 **Deployment > Excluded Paths 설정 화면**
 {: .text-center}
 
@@ -76,7 +76,7 @@ tags:
 
 이제 로컬에서 테스트용 파일을 생성해봅니다. 로컬에서 `test.py`을 생성하고 `hello world`를 출력하는 코드를 실행해보면 서버에서 코드가 실행되는 것을 확인할 수 있습니다.
 
-![result](/assets/images/posts/2022-9-27-tistory-post-116/img-6.png){: .align-center}
+![result](/assets/images/posts/2022-9-27-pycharm-remote-interpreter-and-remote-deployment/img-6.png){: .align-center}
 
 하단 실행 화면을 보면 생성한 **가상 환경(venv)**의 python을 이용해서 작성한 코드가 복제된 서버 경로에서 실행되는 것을 확인할 수 있습니다.
 

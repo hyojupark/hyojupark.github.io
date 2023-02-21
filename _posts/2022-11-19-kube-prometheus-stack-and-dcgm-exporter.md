@@ -91,7 +91,7 @@ $ helm install --generate-name -n prometheus gpu-helm-charts/dcgm-exporter
 
 **DCGM-Exporter**가 잘 설치되었는지 확인해보기 위해서 prometheus에 접속해보겠습니다. Kubernetes Service에서 `prometheus-operated`를 **port forwarding**해서 확인하면 됩니다. **DCGM**이라고 입력했을 때 아래와 같이 다양한 metric이 보이면 잘 설치된 것입니다.
 
-![prometheus web](/assets/images/posts/2022-11-19-tistory-post-135/img-1.png){: .align-center}
+![prometheus web](/assets/images/posts/2022-11-19-kube-prometheus-stack-and-dcgm-exporter/img-1.png){: .align-center}
 **prometheus web ui**
 {: .text-center}
 
@@ -102,7 +102,7 @@ $ helm install --generate-name -n prometheus gpu-helm-charts/dcgm-exporter
 - 모니터링에 필요한 dashboard는 **Grafana dashboard**에서 **DCGM**으로 검색해서 찾으면 됩니다. 여기서는 아래 dashboard를 사용했습니다. dashboard에 아래 dashboard ID를 복사해서 추가하면 됩니다.
 - <https://grafana.com/grafana/dashboards/12239-nvidia-dcgm-exporter-dashboard/>
 
-![Grafana Dashboard](/assets/images/posts/2022-11-19-tistory-post-135/img-2.png){: .align-center}
+![Grafana Dashboard](/assets/images/posts/2022-11-19-kube-prometheus-stack-and-dcgm-exporter/img-2.png){: .align-center}
 **Grafana Dashboard**
 {: .text-center}
 

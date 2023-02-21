@@ -40,13 +40,13 @@ with mlflow.start_run() as run:
 
 모델은 `mlflow.register_model`에 작성한 모델 이름(mnist_test)으로 생성됩니다. 모델 이름이 없으면 자동으로 생성되고, Version은 1부터 자동으로 붙습니다.
 
-![mlflow ui](/assets/images/posts/2022-9-18-tistory-post-111/img-1.png){: .align-center}
+![mlflow ui](/assets/images/posts/2022-9-18-mlflow-model-registry/img-1.png){: .align-center}
 **MLflow UI**
 {: .text-center}
 
 Colum에서 볼 수 있듯이 각 모델을 **Staging**과 **Production**에 하나씩 등록할 수 있습니다. **검증 단계**에서 Staging 모델을 쉽게 검증하거나, **배포 단계**에서 Production 모델을 쉽게 가져다 쓸 수 있도록 해줍니다.
 
-![mlflow models](/assets/images/posts/2022-9-18-tistory-post-111/img-2.png){: .align-center}
+![mlflow models](/assets/images/posts/2022-9-18-mlflow-model-registry/img-2.png){: .align-center}
 
 Stage는 `None`, `Staging`, `Production`, `Archived`가 있습니다. 맨 처음 상태가 `None`이고, `Staging`과 `Production`은 각각 하나씩만 등록이 가능합니다. `Archived`는 `Staging`이나 `Production`으로 교체된 모델이 `Archived`가 됩니다.
 
