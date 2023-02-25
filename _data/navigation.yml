@@ -16,3 +16,18 @@ main:
   #   url: /collection-archive/
   # - title: "Sitemap"
   #   url: /sitemap/
+
+sidebar-categories:
+  - title: Language
+    children:
+      - title: Python
+        url: /categories/python
+  # - title: DataOps
+  #   children:
+  #     - title: 데이터 수집
+  #       url: /categories/데이터%20수집
+  # - title: MLOps
+  # - title: DevOps
+  # - title: Server
+  # - title: OS
+  # - title: Blog/Life
