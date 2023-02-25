@@ -69,7 +69,7 @@ with DAG(
 
 위 코드를 Graph로 확인해보면 아래와 같습니다.
 
-![](/assets/images/posts/2022-6-7-tistory-post-36/img-1.png){: .align-center}
+![](/assets/images/posts/2022-6-7-select-task-using-branchpythonoperator/img-1.png){: .align-center}
 **< DAG Graph >**
 {: .text-center}
 <br>

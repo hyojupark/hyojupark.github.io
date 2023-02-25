@@ -290,8 +290,6 @@ defaults:
       comments:  true
       share: true
       related: true
-      sidebar:
-        nav: "sidebar-categories"
 
   # _pages
   - scope:
@@ -300,3 +298,5 @@ defaults:
     values:
       layout: single
       author_profile: true
+      sidebar:
+        nav: "sidebar-categories"
