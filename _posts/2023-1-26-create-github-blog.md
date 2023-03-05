@@ -2,7 +2,7 @@
 title: GitHub 블로그 생성기 (Mac 기준)
 toc: true
 categories:
-  - 기타
+  - Blog
 tags:
   - Blog
   - brew

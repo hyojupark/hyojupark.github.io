@@ -1,0 +1,12 @@
+---
+title: BentoML
+layout: archive
+permalink: /categories/BentoML
+---
+
+{% assign posts = site.categories['BentoML'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

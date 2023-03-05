@@ -1,0 +1,12 @@
+---
+title: Windows
+layout: archive
+permalink: /categories/Windows
+---
+
+{% assign posts = site.categories['Windows'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

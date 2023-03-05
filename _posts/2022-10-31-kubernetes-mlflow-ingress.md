@@ -2,7 +2,7 @@
 title: Kubernetes MLflow ingress 적용 (UI, API 사용하기)
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - Ingress
   - kubernetes

@@ -2,7 +2,7 @@
 title: MLflow Tracking Server 연동 학습 예시
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - artifact
   - log_artifacts

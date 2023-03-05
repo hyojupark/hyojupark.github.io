@@ -2,7 +2,7 @@
 title: MongoDB string type timestamp 조회하기
 toc: true
 categories:
-  - 데이터/데이터베이스
+  - Database
 tags:
   - find
   - gettime

@@ -2,7 +2,7 @@
 title: minimal-mistakes jekyll 테마 적용 (근데 이제 ruby 3.2에서 생긴 오류를 곁들인)
 toc: true
 categories:
-  - 기타
+  - Blog
 tags:
   - Jekyll
   - minimal-mistakes

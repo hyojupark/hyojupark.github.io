@@ -21,13 +21,56 @@ sidebar-categories:
   - title: Language
     children:
       - title: Python
-        url: /categories/python
-  # - title: DataOps
-  #   children:
-  #     - title: 데이터 수집
-  #       url: /categories/데이터%20수집
-  # - title: MLOps
-  # - title: DevOps
-  # - title: Server
-  # - title: OS
-  # - title: Blog/Life
+        url: /categories/Python
+  - title: DataOps
+    children:
+      - title: ELK Stack
+        url: /categories/ELK Stack
+      - title: ETL
+        url: /categories/ETL
+      - title: 데이터 수집
+        url: /categories/데이터 수집
+      - title: 데이터 시각화
+        url: /categories/데이터 시각화
+      - title: Database
+        url: /categories/Database
+  - title: MLOps
+    children:
+      - title: Deep Learning, AI
+        url: /categories/Deep Learning, AI
+      - title: MLflow
+        url: /categories/MLflow
+      - title: BentoML
+        url: /categories/BentoML
+      - title: Airflow
+        url: /categories/Airflow
+  - title: DevOps
+    children:
+      - title: Docker
+        url: /categories/Docker
+      - title: Kubernetes
+        url: /categories/Kubernetes
+  - title: Server
+    children:
+      - title: FastAPI
+        url: /categories/FastAPI
+      - title: Flask
+        url: /categories/Flask
+  - title: OS
+    children:
+      - title: Linux
+        url: /categories/Linux
+      - title: Windows
+        url: /categories/Windows
+  - title: Study
+    children:
+      - title: Trend
+        url: /categories/Trend
+      - title: 책
+        url: /categories/책
+  - title: Blog/Life
+    children:
+      - title: Blog
+        url: /categories/Blog
+      - title: Life
+        url: /categories/Life

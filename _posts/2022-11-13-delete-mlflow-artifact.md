@@ -2,7 +2,7 @@
 title: MLflow Artifact 삭제 (Permanently delete runs)
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - artifact delete
   - Delete

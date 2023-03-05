@@ -2,7 +2,7 @@
 title: FastAPI 설치 및 실행
 toc: true
 categories:
-  - Server/FastAPI
+  - FastAPI
 tags:
   - fastapi
   - flask

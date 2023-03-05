@@ -2,7 +2,7 @@
 title: MLflow PyTorch logging INVALID_PARAMETER_VALUE 관련 오류
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - autolog
   - DISABLE_MLFLOW_INTEGRATION

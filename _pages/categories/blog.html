@@ -1,0 +1,12 @@
+---
+title: Blog
+layout: archive
+permalink: /categories/Blog
+---
+
+{% assign posts = site.categories['Blog'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

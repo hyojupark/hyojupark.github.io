@@ -1,0 +1,12 @@
+---
+title: Database
+layout: archive
+permalink: /categories/Database
+---
+
+{% assign posts = site.categories['Database'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

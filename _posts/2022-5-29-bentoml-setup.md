@@ -2,7 +2,7 @@
 title: BentoML 설치 및 동작 확인
 toc: true
 categories:
-  - MLOps/BentoML
+  - BentoML
 tags:
   - AI
   - BentoML

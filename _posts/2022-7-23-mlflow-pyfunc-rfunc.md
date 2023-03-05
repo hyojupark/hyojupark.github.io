@@ -2,7 +2,7 @@
 title: MLflow v1.0+ CLI pyfunc, rfunc 명령어를 models로 통일
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - MLflow
   - models
@@ -12,7 +12,7 @@ tags:
 
 일부 작성한지 오래된 튜토리얼의 **CLI에서 pyfunc, rfunc를** 사용하고 있습니다. 해당 명령어가 **v1.0 정식 버전이 출시되면서 models로 통일**되었기 때문에 해당 부분을 공유합니다.
 
-![](/assets/images/posts/2022-7-23-tistory-post-85/img-1.png){: .align-center}
+![](/assets/images/posts/2022-7-23-mlflow-pyfunc-rfunc/img-1.png){: .align-center}
 **MLflow v1.0 release note 일부**
 {: .text-center}
 

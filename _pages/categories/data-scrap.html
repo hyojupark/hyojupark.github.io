@@ -1,0 +1,10 @@
+---
+title: 데이터 수집
+layout: archive
+permalink: /categories/데이터 수집
+---
+
+{% assign posts = site.categories['데이터/데이터 수집'] %}
+{% for post in posts %}
+    {% include archive-single.html type=page.entries_layout %}
+{% endfor %}

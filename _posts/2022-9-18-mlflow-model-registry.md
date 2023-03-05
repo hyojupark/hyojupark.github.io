@@ -2,7 +2,7 @@
 title: MLflow model registry에 저장 및 관리
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - MLflow
   - MlflowClient

@@ -2,7 +2,7 @@
 title: BentoML Yatai로 모델 관리
 toc: true
 categories:
-  - MLOps/BentoML
+  - BentoML
 tags:
   - BentoML
   - Yatai

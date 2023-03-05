@@ -2,7 +2,7 @@
 title: 글또 8기를 시작하며
 toc: true
 categories:
-  - 기타
+  - Life
 tags:
   - 글또
   - 다짐

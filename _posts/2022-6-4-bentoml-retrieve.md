@@ -2,7 +2,7 @@
 title: BentoML Retrieve
 toc: true
 categories:
-  - MLOps/BentoML
+  - BentoML
 tags:
   - artifact
   - BentoML

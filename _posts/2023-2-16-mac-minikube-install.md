@@ -2,7 +2,7 @@
 title: Mac에서 Minikube 설치하기
 toc: true
 categories:
-  - kubernetes
+  - Kubernetes
 tags:
   - minkube
 ---

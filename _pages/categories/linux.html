@@ -1,0 +1,12 @@
+---
+title: Linux
+layout: archive
+permalink: /categories/Linux
+---
+
+{% assign posts = site.categories['Linux'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

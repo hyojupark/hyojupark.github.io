@@ -2,7 +2,7 @@
 title: MLflow 설치 (using Helm)
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - artifact hub
   - artifacts-destination

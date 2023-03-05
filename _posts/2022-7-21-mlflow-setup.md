@@ -2,7 +2,7 @@
 title: MLflow 설치 및 동작 확인
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - AI
   - machine learning

@@ -2,7 +2,7 @@
 title: Hadoop과 Hive, Presto 핵심 요약
 toc: true
 categories:
-  - 데이터/데이터베이스
+  - Database
 tags:
   - hadoop
   - hdfs

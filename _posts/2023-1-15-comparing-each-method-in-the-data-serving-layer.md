@@ -2,7 +2,7 @@
 title: 데이터 제공 Layer의 각 방법 비교(RESTful API, Direct Connection, Data Forward Service)
 toc: true
 categories:
-  - 데이터/ETL
+  - ETL
 tags:
   - Data Forward Service
   - data lake

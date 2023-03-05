@@ -2,7 +2,7 @@
 title: MLflow 패키지 설치 없이 REST API로 사용하기
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - airflow
   - get-latest-versions

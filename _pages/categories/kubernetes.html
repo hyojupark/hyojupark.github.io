@@ -1,0 +1,12 @@
+---
+title: Kubernetes
+layout: archive
+permalink: /categories/Kubernetes
+---
+
+{% assign posts = site.categories['Kubernetes'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

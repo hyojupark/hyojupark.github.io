@@ -1,0 +1,12 @@
+---
+title: Deep Learning, AI
+layout: archive
+permalink: /categories/Deep Learning, AI
+---
+
+{% assign posts = site.categories['Deep Learning, AI'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

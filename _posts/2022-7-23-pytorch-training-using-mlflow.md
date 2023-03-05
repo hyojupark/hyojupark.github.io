@@ -2,7 +2,7 @@
 title: MLflow PyTorch 학습 example (using MLproject, pip)
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - conda
   - MLflow

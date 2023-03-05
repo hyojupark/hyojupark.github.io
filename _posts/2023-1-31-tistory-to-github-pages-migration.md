@@ -2,7 +2,7 @@
 title: Tistory에서 GitHub Pages로 옮기는 여정
 toc: true
 categories:
-  - 기타
+  - Blog
 tags:
   - Tistory
   - GitHub Pages

@@ -2,7 +2,7 @@
 title: K3s 및 Helm 설치
 toc: true
 categories:
-  - kubernetes
+  - Kubernetes
 tags:
   - k3s
   - helm

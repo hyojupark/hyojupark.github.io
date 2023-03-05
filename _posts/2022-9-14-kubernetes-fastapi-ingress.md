@@ -2,7 +2,7 @@
 title: FastAPI Kubernetes ingress 연결
 toc: true
 categories:
-  - Server/FastAPI
+  - FastAPI
 tags:
   - fastapi
   - Ingress

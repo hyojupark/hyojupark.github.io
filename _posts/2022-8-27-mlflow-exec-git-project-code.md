@@ -2,7 +2,7 @@
 title: MLflow Git 프로젝트 코드로 실행
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - Git
   - MLflow

@@ -2,7 +2,7 @@
 title: Tistory code style 변경 (highlight.js custom 적용)
 toc: true
 categories:
-  - 기타
+  - Blog
 tags:
   - highlight
   - highlight.js

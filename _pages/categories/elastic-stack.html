@@ -1,0 +1,12 @@
+---
+title: Elasic Stack
+layout: archive
+permalink: /categories/Elasic Stack
+---
+
+{% assign posts = site.categories['Elasic Stack'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

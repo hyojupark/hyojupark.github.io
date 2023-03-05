@@ -2,7 +2,7 @@
 title: MLflow Production 모델의 정보만 가져오는 방법
 toc: true
 categories:
-  - MLOps/MLflow
+  - MLflow
 tags:
   - Archived
   - get_latest_versions

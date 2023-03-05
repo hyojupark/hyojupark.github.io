@@ -1,7 +1,7 @@
 ---
 title:  "Flask Flask-Classful을 이용한 REST API 적용"
 categories: 
-  - Server/Flask
+  - Flask
 tags:
   - flask
   - Flask-Classful

@@ -1,0 +1,12 @@
+---
+title: ETL
+layout: archive
+permalink: /categories/ETL
+---
+
+{% assign posts = site.categories['ETL'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}
