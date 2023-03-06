@@ -2,7 +2,7 @@
 title: Metabase (데이터 시각화, Tableau 대체)
 toc: true
 categories:
-  - 데이터/데이터 시각화
+  - 데이터 시각화
 tags:
   - 대시보드
   - 데이터 시각화

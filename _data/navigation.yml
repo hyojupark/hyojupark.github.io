@@ -24,8 +24,8 @@ sidebar-categories:
         url: /categories/Python
   - title: DataOps
     children:
-      - title: ELK Stack
-        url: /categories/ELK Stack
+      - title: Elastic Stack
+        url: /categories/Elastic Stack
       - title: ETL
         url: /categories/ETL
       - title: 데이터 수집

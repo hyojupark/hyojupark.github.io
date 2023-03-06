@@ -2,7 +2,7 @@
 title: 데이터 스크래핑 2 (Selenium)
 toc: true
 categories:
-  - 데이터/데이터 수집
+  - 데이터 수집
 tags:
   - Beautifulsoup
   - Crawling

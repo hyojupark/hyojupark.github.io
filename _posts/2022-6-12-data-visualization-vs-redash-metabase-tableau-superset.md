@@ -2,7 +2,7 @@
 title: 데이터 시각화 비교 (Redash, Metabase, Tableau, Superset)
 toc: true
 categories:
-  - 데이터/데이터 시각화
+  - 데이터 시각화
 tags:
   - metabase
   - redash
