@@ -49,3 +49,7 @@ $type-size-4-5: 1em !default;
 .archive {
   padding-left: 30px;
 }
+
+#footer, .page__footer-follow, .page__footer-copyright {
+  display: none;
+}
