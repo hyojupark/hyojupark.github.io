@@ -22,7 +22,7 @@ $ docker save -o /home/user/myimage.tar myimage:tag
 ```
 
 ### Load
-**load**는 `-i` 또는 `--input` 옵션을 사용하여 파일로부터 Docker Image를 불러올 수 있습니다. 이때 save할 때 지정한 Image의 `이름:태그` 정보로 불러오게 됩니다.
+**load**는 `-i` 또는 `--input` 옵션을 사용하여 파일로부터 Docker Image를 불러올 수 있습니다. 이때 **save**할 때 지정한 Image의 `이름:태그` 정보로 불러오게 됩니다.
 ```bash
 $ docker load -i /home/user/myimage.tar
 ```
