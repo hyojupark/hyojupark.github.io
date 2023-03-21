@@ -1,7 +1,7 @@
 ---
 title: 데이터 수집 전처리하기 (태그, 특수문자 코드)
 categories:
-  - Data
+  - ETL
 tags:
   - Data
 ---
