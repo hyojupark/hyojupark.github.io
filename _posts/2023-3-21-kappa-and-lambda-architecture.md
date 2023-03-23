@@ -37,8 +37,13 @@ published: false
 3. Architecture lock-in
 
 
+아키텍처 그림 참조
+- 차세대 빅데이터 플랫폼 DATA LAKE, 82-83p
+
+
 
 
 
 ### **Reference**
 - <https://nexocode.com/blog/posts/lambda-vs-kappa-architecture/>
+- 윤선웅, 『차세대 빅데이터 플랫폼 DATA LAKE』, 좋은땅(2021), p63-129.
