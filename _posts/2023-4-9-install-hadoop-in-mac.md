@@ -86,6 +86,14 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents
 ```xml
 <configuration>
     <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>/Users/jangboyun/hadoop/hadoop-3.3.4/dfs/name</value>
+    </property>
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>/Users/jangboyun/hadoop/hadoop-3.3.4/dfs/data</value>
+    </property>
+    <property>
         <name>dfs.replication</name>
         <value>1</value>
     </property>
@@ -127,6 +135,12 @@ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 chmod 0600 ~/.ssh/authorized_keys
 ```
 
+### NameNode, DataNode Directory 생성
+```bash
+mkdir -p /usr/local/Cellar/hadoop/hdfs/namenode
+mkdir -p /usr/local/Cellar/hadoop/hdfs/datanode
+```
+
 ### NameNode Format
 ```bash
 hdfs namenode -format
@@ -136,7 +150,14 @@ hdfs namenode -format
 ```bash
 cd /usr/local/Cellar/hadoop/3.3.4
 libexec/sbin/start-all.sh
+
 jps
+76689 SecondaryNameNode
+76883 ResourceManager
+77058 Jps
+76549 DataNode
+76984 NodeManager
+76445 NameNode
 ```
 
 
