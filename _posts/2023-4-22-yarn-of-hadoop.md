@@ -1,11 +1,11 @@
 ---
-title: Hadoop과 Yarn
+title: Hadoop의 Yarn
 categories:
   - Hadoop
 tags:
   - Hadoop
   - Yarn
-published: false
+# published: false
 ---
 
 ## Yarn의 등장 배경
@@ -19,7 +19,7 @@ Hadoop의 초기 버전(1.0)은 MapReduce를 기반으로 분산 데이터 처�
 
 
 ## Yarn의 구성 요소
-Yarn의 기본 아이디어는 **리소스 관리(Resource Management)**와 **작업 스케줄링/모니터링(Job Scheduling/Monitoring)**을 별도의 데몬으로 분리하는 것입니다.
+Yarn의 기본 아이디어는 **리소스 관리(Resource Management)**와 **작업 스케줄링/모니터링(Job Scheduling/Monitoring)**을 <u>별도의 데몬으로 분리</u>하는 것입니다.
 
 YARN은 다음과 같은 구성 요소로 구성됩니다.
 1. ResourceManager
@@ -36,6 +36,8 @@ YARN은 다음과 같은 구성 요소로 구성됩니다.
 
 <br>
 
+## Yarn Architecture
+
 위의 각 구성요소를 포함하는 아키텍처의 모습은 아래와 같습니다.
 
 ![yarn-architecture](/assets/images/posts/2023-4-9-yarn-of-hadoop/yarn_architecture.png){: .align-center}
@@ -46,7 +48,11 @@ YARN은 다음과 같은 구성 요소로 구성됩니다.
 **Yarn Architecture Flow**
 {: .text-center}
 
-아키텍처의 흐름을 보면 `Client`가 `ResourceManager`에 `Job`을 전달하면 노드에 `Container`를 생성하고 `ApplicationMaster`를 실행합니다. 실행된 `ApplicationMaster`가 `ResourceManager`에 자원을 요청하면 `ResourceManager`는 여러 노드에 걸쳐 `Container`를 생성하고 `Task`를 할당합니다. 이제 `ApplicationMaster`는 각각의 `NodeManager`를 통해 `Container`의 `Task`에서 실행될 `Application` 실행을 요청합니다. `ApplicationMaster`는 실행중인 `Task`를 모니터링하다 완료되면 `Job`을 종료하고 `Client`에 결과를 전달합니다.
+아키텍처의 흐름을 보면 아래와 같습니다.
+1. `Client`가 `ResourceManager`에 `Job`을 전달하면 노드에 `Container`를 생성하고 `ApplicationMaster`를 실행합니다. 
+2. 실행된 `ApplicationMaster`가 `ResourceManager`에 자원을 요청하면 `ResourceManager`는 여러 노드에 걸쳐 `Container`를 생성하고 `Task`를 할당합니다. 
+3. 이제 `ApplicationMaster`는 각각의 `NodeManager`를 통해 `Container`의 `Task`를 실행합니다. 
+4. `ApplicationMaster`는 실행중인 `Task`를 모니터링하다 완료되면 `ResourceManager`에 알리고 `Client`에 결과를 전달하면서 `Job`을 종료합니다.
 
 <br>
 
