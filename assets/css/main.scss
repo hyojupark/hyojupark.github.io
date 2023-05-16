@@ -53,3 +53,11 @@ $type-size-4-5: 1em !default;
 #footer, .page__footer-follow, .page__footer-copyright {
   display: none;
 }
+
+section.page__content > p.text-center > strong {
+  color: black;
+}
+
+section.page__content > p > strong {
+  color: #ef5369;
+}
