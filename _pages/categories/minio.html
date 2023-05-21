@@ -1,0 +1,12 @@
+---
+title: MinIO
+layout: archive
+permalink: /categories/MinIO
+---
+
+{% assign posts = site.categories['MinIO'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}
