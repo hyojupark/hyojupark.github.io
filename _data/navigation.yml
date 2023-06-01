@@ -24,6 +24,8 @@ sidebar-categories:
         url: /categories/Python
   - title: DataOps
     children:
+      - title: Data
+        url: /categories/Data
       - title: Elastic Stack
         url: /categories/Elastic Stack
       - title: ETL
@@ -34,6 +36,8 @@ sidebar-categories:
         url: /categories/데이터 시각화
       - title: Database
         url: /categories/Database
+      - title: MinIO
+        url: /categories/MinIO
   - title: MLOps
     children:
       - title: Deep Learning, AI
