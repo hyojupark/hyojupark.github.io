@@ -6,7 +6,7 @@ tags:
   - ubuntu
   - minikube
   - lens
-published: false
+# published: false
 ---
 
 이번에 새로 구매한 노트북에 Ubuntu 22.04를 설치하면서 Kubernetes 환경을 구축한 내용을 정리해봤습니다. 목표는 아래와 같습니다.
@@ -96,7 +96,6 @@ kube-system    kube-proxy-4mt5w                      1/1     Running   0        
 kube-system    kube-scheduler-minikube               1/1     Running   0               10m
 kube-system    storage-provisioner                   1/1     Running   0               10m
 kube-system    weave-net-9nqst                       2/2     Running   0               12m
-lens-metrics   kube-state-metrics-59584f8694-wdktp   1/1     Running   0               10m
 
 ```
 
@@ -136,12 +135,12 @@ $ sudo dpkg -i OpenLens-6.4.15.amd64.deb
 {: .text-center}
 
 ### extension 추가
-OpenLens에서는 Lens에서 유료 기능으로 빠진 기능 중 **node-pod-menu**와 **lens-metric**을 추가합니다. 추가 방법은 Lens에서 `Ctrl + Shift + E`를 누르고 아래 방법으로 각각 추가합니다.
+OpenLens에서는 Lens에서 유료 기능으로 빠진 기능 중 **node-pod-menu**와 **lens-metrics**을 추가합니다. 추가 방법은 Lens에서 `Ctrl + Shift + E`를 누르고 아래 방법으로 각각 추가합니다.
 
-#### node-pod-menu
+#### 1) node-pod-menu
 <https://github.com/alebcay/openlens-node-pod-menu>에 올라와있는 `@alebcay/openlens-node-pod-menu`를 입력 후 Install
 
-#### lens-metrics
+#### 2) lens-metrics
 lens-metrics는 <https://raw.githubusercontent.com/shilazi/openlens-lens-metrics/main/build/shilazi-openlens-lens-metrics-0.1.0.tgz>에서 파일을 받은 후 파일 경로르 추가해서 Install
 
 extension이 전부 설치됐으면 아래와 같이 2개 extension이 추가된 것을 확인할 수 있습니다.
