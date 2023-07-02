@@ -150,9 +150,19 @@ extension이 전부 설치됐으면 아래와 같이 2개 extension이 추가된
 **Extension 추가**
 {: .text-center}
 
-이제 metrics를 연동해야합니다. clusters에서 minikube cluster의 우측 버튼을 눌러 settings에 들어가서 Extensions에 `Lens Metrics`가 추가된 것을 확인하고 클릭합니다. 그리고 보이는 3개 체크 항목을 모두 체크하고 Apply 버튼을 눌러줍니다.
+이제 metrics를 연동해야합니다. clusters에서 minikube cluster의 우측 버튼을 눌러 settings에 들어가서 Extensions에 `Lens Metrics`가 추가된 것을 확인하고 클릭합니다. 그리고 보이는 3개 체크 항목을 모두 체크하고 Apply 버튼을 눌러줍니다. 그러면 minikube에 prometheus와 node-exporter가 설치되면서 metrics 수집이 이루어집니다.
 
 ![extensions](/assets/images/posts/2023-7-1-ubuntu-minikube-and-lens/lens_metrics.png){: .align-center}
 **Lens Metrics 활성화**
 {: .text-center}
 
+### 연동 확인
+이제 minikube cluster에 들어가보면 Cluster에서 전체 리소스를 모니터링할 수 있고, Pods에서 Pod를 클릭했을 때 해당 Pod가 사용중인 리소스 모인니터링이 가능한 것을 확인할 수 있습니다.
+
+그리고 추가한 node-pod-menu extension 덕에 Pod를 클릭했을 때 우측 상단에 `Pod Shell`과 `Pod Logs` 버튼이 있어, 해당 Pod에 shell로 직접 접근하거나 log를 보는 작업을 클릭만으로 바로 작업할 수 있습니다.
+
+![extensions](/assets/images/posts/2023-7-1-ubuntu-minikube-and-lens/lens_pods.png){: .align-center}
+**Pod 상세 내용**
+{: .text-center}
+
+Lens에서는 이 외에도 Service, Deployment 등의 설정 확인 및 수정과 Helm 연동 등의 기능을 지원하기 때문에 잘 활용했을 때의 이점이 많습니다.
