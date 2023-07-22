@@ -1,0 +1,12 @@
+---
+title: Google Cloud
+layout: archive
+permalink: /categories/Google Cloud
+---
+
+{% assign posts = site.categories['Google Cloud'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}

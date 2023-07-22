@@ -54,6 +54,10 @@ sidebar-categories:
         url: /categories/Docker
       - title: Kubernetes
         url: /categories/Kubernetes
+  - title: Cloud
+    children:
+      - title: Google Cloud
+        url: /categories/Google Cloud
   - title: Server
     children:
       - title: FastAPI
