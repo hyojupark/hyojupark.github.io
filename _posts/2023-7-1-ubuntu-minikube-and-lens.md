@@ -129,7 +129,7 @@ $ sudo dpkg -i OpenLens-6.4.15.amd64.deb
 
 이제 Lens를 실행해보면 아래와 같이 cluster에 minikube가 추가된 것을 확인할 수 있습니다.
 (만약 연결되지 않은 경우, labels의 file 경로와 같이 `~/.kube/config` 경로를 설정해주면 됩니다.)
-가
+
 ![lens main](/assets/images/posts/2023-7-1-ubuntu-minikube-and-lens/lens_main.png){: .align-center}
 **Lens Main**
 {: .text-center}
