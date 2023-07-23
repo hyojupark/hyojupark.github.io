@@ -1,5 +1,5 @@
 ---
-title: Google Cloud를 이용한 뉴스 데이터 수집
+title: Google Cloud를 이용한 데이터 수집 파이프라인 구축기
 categories:
   - Google Cloud
 tags:
@@ -20,9 +20,11 @@ Google Cloud를 이용해서 데이터 수집 파이프라인을 구축해본 �
 
 전체적인 아키텍처는 다음과 같습니다.
 
-#TODO: 아키텍처 그림
+![Architecture](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/cloud_architecture.png){: .align-center}
+**전체 아키텍처**
+{: .text-center}
 
-**Cloud Functions**에서 데이터를 수집해서 **Cloud Storage(GCS)**에 저장하고 이 과정을 **Cloud Scheduler**를 통해 스케줄링하여 주기적으로 동작시킵니다. Cloud Storage에 저장된 데이터는 BigQuery의 **Data Transfer Service(DTS)**를 통해 주기적으로 **BigQuery**에 적재됩니다. 마지막으로 **Looker Studio**에서 간단하게 시각화해서 수집된 데이터를 그래프로 확인합니다.
+**Cloud Scheduler**를 통해 주기적으로 Cloud Functions을 실행시켜줍니다. **Cloud Functions**은 데이터를 수집해서 **Cloud Storage(GCS)**에 저장합니다. Cloud Storage에 저장된 데이터는 BigQuery의 **Data Transfer Service(DTS)**를 통해 주기적으로 **BigQuery**에 적재되고, 마지막으로 **Looker Studio**에서 간단하게 시각화해서 수집된 데이터를 그래프로 확인합니다.
 
 <br>
 
@@ -36,7 +38,7 @@ Google Cloud를 이용해서 데이터 수집 파이프라인을 구축해본 �
 
 네이버 뉴스 검색 API를 사용하기 위해서는 아래와 같은 애플리케이션 등록 절차만 진행하면 됩니다. 방법은 Naver Developers에 Application(https://developers.naver.com/apps)으로 들어가서 애플리케이션 등록에서 진행할 수 있습니다.
 
-![Naver News Search API Application Registry](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/naver_news_application_registry.png){: .align-center}
+![Naver News Search API Application Registry](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/naver_news_application_registry.png){: .align-center}
 **네이버 뉴스 검색 API 애플리케이션 등록**
 {: .text-center}
 
@@ -71,7 +73,7 @@ N
 
 수집한 데이터는 모두 Cloud Storage에 저장할 것이기 때문에 미리 생성 후 Bucket을 등록해줍니다. 데이터 위치만 단일 Region에서 `asia-northeast3 (서울)`을 선택하고 나머지는 기본값을 사용하면 됩니다.
 
-![Cloud Storage Bucket Registry](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/bucket_registry.png){: .align-center}
+![Cloud Storage Bucket Registry](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/bucket_registry.png){: .align-center}
 **Cloud Storage Bucket 생성**
 {: .text-center}
 
@@ -206,7 +208,7 @@ gcloud functions deploy news_data_save_to_gcs --runtime python38 --trigger-http 
 
 이제 배포하면 콘솔 웹에 아래와 같이 배포된 것을 확인할 수 있습니다.
 
-![Cloud Functions Main](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/cloud_functions_main.png){: .align-center}
+![Cloud Functions Main](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/cloud_functions_main.png){: .align-center}
 **Cloud Functions Main**
 {: .text-center}
 
@@ -220,14 +222,14 @@ Cloud Functions 사용 비용은 호출건으로 봤을 때 월 200만건 무료
 
 배포한 Cloud Functions를 1분 단위로 실행하기 위해서 Cloud Scheduler에 등록해줍니다. 등록은 Cloud Scheduler에 들어가서 작업 만들기 버튼을 눌러서 UI 상에서 진행합니다.
 
-![Cloud Scheduler Setting 1](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/cloud_scheduler_setting_1.png){: .align-center}
+![Cloud Scheduler Setting 1](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/cloud_scheduler_setting_1.png){: .align-center}
 **Cloud Scheduler 설정 1**
 {: .text-center}
 
 위 설정에서 빈도가 cron 형식을 사용합니다. 필요에 따라서 변경해서 사용하시면 됩니다.
 
 
-![Cloud Scheduler Setting 2](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/cloud_scheduler_setting_2.png){: .align-center}
+![Cloud Scheduler Setting 2](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/cloud_scheduler_setting_2.png){: .align-center}
 **Cloud Scheduler 설정 2**
 {: .text-center}
 
@@ -235,7 +237,7 @@ Cloud Functions 사용 비용은 호출건으로 봤을 때 월 200만건 무료
 
 이제 Cloud Scheduler까지 정상적으로 생성된 것을 확인할 수 있습니다.
 
-![Cloud Scheduler Main](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/cloud_scheduler_main.png){: .align-center}
+![Cloud Scheduler Main](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/cloud_scheduler_main.png){: .align-center}
 **Cloud Scheduler Main**
 {: .text-center}
 
@@ -249,7 +251,7 @@ Cloud Scheduler는 3개까지 무료로 사용 가능합니다. (<https://cloud.
 
 생성된 데이터 세트 이름 오른쪽 `:` 버튼을 눌러 테이블 만들기를 눌러줍니다. 테이블을 생성할때는 Cloud Functions에서 사용했던 python 코드 내 Avro 스키마가 사용될 수 있도록 아래와 같이 맞춰서 만들어줘야합니다.
 
-![BigQuery Table Schema](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/bigquery_table_schema.png){: .align-center}
+![BigQuery Table Schema](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/bigquery_table_schema.png){: .align-center}
 **BigQuery Table Schema**
 {: .text-center}
 
@@ -259,21 +261,21 @@ Cloud Scheduler는 3개까지 무료로 사용 가능합니다. (<https://cloud.
 
 BigQuery는 Cloud Storage에 저장된 데이터 파일을 별도의 코드 작성없이 BigQuery에 넣을 수 있는 **Data Transfer Service**를 제공합니다. BigQuery 페이지에서 데이터 전송으로 들어가 만들면 생성 가능합니다.
 
-![Data Transfer Service Setting 1](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/dts_setting_1.png){: .align-center}
+![Data Transfer Service Setting 1](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/dts_setting_1.png){: .align-center}
 **Data Transfer Service Setting 1**
 {: .text-center}
 
 소스는 Google Cloud Storage를 선택하고 동작 주기를 설정합니다. 주기는 최소 15분 단위까지만 설정이 가능합니다.
 
 
-![Data Transfer Service Setting 2](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/dts_setting_2.png){: .align-center}
+![Data Transfer Service Setting 2](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/dts_setting_2.png){: .align-center}
 **Data Transfer Service Setting 2**
 {: .text-center}
 
 데이터 세트를 선택하고 Table 이름은 직접 입력해줍니다. 그리고 데이터가 저장되는 Cloud Storage URI를 입력해주는데, 디렉토리 내 저장된 파일을 모두 가져오도록 *을 꼭 붙여줍니다. 그리고 `Delete source files after transfer`를 체크헤줘서 전송된 파일은 삭제되도록 하고, 파일 포맷은 저장된 파일 포맷인 `AVRO`를 선택합니다.
 
 
-![Data Transfer Service Setting 3](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/dts_setting_3.png){: .align-center}
+![Data Transfer Service Setting 3](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/dts_setting_3.png){: .align-center}
 **Data Transfer Service Setting 3**
 {: .text-center}
 
@@ -302,13 +304,13 @@ ORDER BY
 
 쿼리는 시간당 데이터 수를 모아서 보는 쿼리입니다. 저는 데이터를 미리 수집해놨기 때문에 아래와 같이 시간 당 수집된 데이터 수를 확인할 수 있습니다.
 
-![BigQuery Query Result](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/bigquery_query_result.png){: .align-center}
+![BigQuery Query Result](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/bigquery_query_result.png){: .align-center}
 **BigQuery 쿼리 실행 결과**
 {: .text-center}
 
 이제 우측에 데이터 탐색을 누르고 Looker Studio로 탐색을 눌러줍니다. 그러면 새 페이지에 테이블과 차트 하나가 생성돼있는데, 이상하게 생성된 차트는 삭제하고 차트 추가를 눌러 시계열 차트를 누르면 일단위로 생성된 데이터를 확인할 수 있습니다.
 
-![Looker Studio Reporting](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/looker_studio_reporting.png){: .align-center}
+![Looker Studio Reporting](/assets/images/posts/2023-7-22-data-collection-using-google-cloud/looker_studio_reporting.png){: .align-center}
 **Looker Studio Reporting**
 {: .text-center}
 
