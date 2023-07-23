@@ -9,11 +9,12 @@ tags:
   - BigQuery
   - BigQuery Data Transfer Service
   - Looker Studio
-published: false
+# published: false
 ---
 
 Google Cloud를 이용해서 데이터 수집 파이프라인을 구축해본 과정을 정리해봤습니다. 클라우드를 사용하지만 초기 비용은 100원도 안나오는 걸로 확인했기 때문에 비용 걱정 없이 따라해보셔도 좋을 것 같습니다.
 
+<br>
 
 ## 1. 아키텍처
 
@@ -21,15 +22,15 @@ Google Cloud를 이용해서 데이터 수집 파이프라인을 구축해본 �
 
 #TODO: 아키텍처 그림
 
-Cloud Functions에서 데이터를 수집해서 Cloud Storage(GCS)에 저장하고 이 과정을 Cloud Scheduler를 통해 스케줄링하여 주기적으로 동작시킵니다. Cloud Storage에 저장된 데이터는 BigQuery의 Data Transfer Service(DTS)를 통해 주기적으로 BigQuery에 적재됩니다. 마지막으로 Looker Studio에서 간단하게 시각화해서 수집된 데이터를 그래프로 확인합니다.
+**Cloud Functions**에서 데이터를 수집해서 **Cloud Storage(GCS)**에 저장하고 이 과정을 **Cloud Scheduler**를 통해 스케줄링하여 주기적으로 동작시킵니다. Cloud Storage에 저장된 데이터는 BigQuery의 **Data Transfer Service(DTS)**를 통해 주기적으로 **BigQuery**에 적재됩니다. 마지막으로 **Looker Studio**에서 간단하게 시각화해서 수집된 데이터를 그래프로 확인합니다.
 
-
+<br>
 
 ## 2. 과정
 
 ### 2.1 뉴스 데이터 수집
 
-뉴스 데이터 수집은 네이버의 뉴스 검색 API를 사용했습니다. (<https://developers.naver.com/docs/serviceapi/search/news/news.md>)
+뉴스 데이터 수집은 **네이버의 뉴스 검색 API**를 사용했습니다. (<https://developers.naver.com/docs/serviceapi/search/news/news.md>)
 
 네이버 뉴스 검색 API는 뉴스 데이터를 쉽게 가져올 수 있다는 장점이 있지만, 본문을 일부밖에 못가져온다는 단점이 있습니다. 하지만 뉴스 본문을 꼭 전부 가져와야하는게 목적이 아니었기 때문에 네이버 뉴스 검색 API를 사용했습니다. 
 
@@ -39,12 +40,13 @@ Cloud Functions에서 데이터를 수집해서 Cloud Storage(GCS)에 저장하�
 **네이버 뉴스 검색 API 애플리케이션 등록**
 {: .text-center}
 
-등록이 완료됐으면 생성한 애플리케이션에 들어가 **Client ID**와 **Client Secret** 정보를 확인해서 잘 기억해둡니다. 이 정보를 Cloud Function에서 사용할 Container의 환경변수로 등록할 것 입니다.
+등록이 완료됐으면 생성한 애플리케이션에 들어가 `Client ID`와 `Client Secret` 정보를 확인해서 잘 기억해둡니다. 이 정보를 Cloud Functions에서 사용할 Container의 환경변수로 등록할 것 입니다.
 
+<br>
 
-### 2.2 Google Cloud 초기 셋팅로
+### 2.2 Google Cloud 초기 셋팅
 
-Cloud Cloud을 사용하기 위해서는 초기 세팅 작업이 필요한데, 순서는 1) 프로젝트 생성 -> 2) 결제 연동 -> 3) sdk 설치 입니다. 프로젝트 생성과 결제 연동은 쉽기 때문에 넘어가고, sdk 설치 과정은 아래 스크립트를 따라하면 됩니다. region을 선택하는 과정이 뜬다면 `asia-northeast3`을 선택하면 됩니다. 
+Google Cloud을 사용하기 위해서는 초기 세팅 작업이 필요한데, 순서는 `1) 프로젝트 생성` -> `2) 결제 연동` -> `3) sdk 설치` 입니다. 프로젝트 생성과 결제 연동은 쉽기 때문에 넘어가고, sdk 설치 과정은 아래 스크립트를 따라하면 됩니다. 여기서 혹시 region을 선택하는 과정이 뜬다면 `asia-northeast3`을 선택하면 됩니다. 
 
 ```bash
 $ echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
@@ -59,10 +61,11 @@ $ gcloud init
 N
 ```
 
-혹시 여기서 나중에 진행할 때 인증 관련 오류가 발생한다면 `gcloud auth login`을 통해서 재인증을 하면 정상 동작합니다.
+혹시 여기서 나중에 이어서 진행할 때 인증 관련 오류가 발생한다면 `gcloud auth login`을 통해서 재인증을 하면 정상 동작합니다.
 
-이후 진행되는 각각의 기능은 하나씩 웹 페이지에 들어가서 미리 사용등록을 해주는게 좋습니다.
+이후 진행되는 각각의 기능은 하나씩 Google Cloud Console에서 들어가 미리 사용등록을 해주는게 좋습니다.
 
+<br>
 
 ### 2.3 Cloud Storage
 
@@ -72,15 +75,16 @@ N
 **Cloud Storage Bucket 생성**
 {: .text-center}
 
-GB당 월 $0.023의 비용이 발생한다고 나와있지만 여기서는 이따 생성할 약 300MB의 Container만 사용하고 1MB 이하의 데이터만 생성됐다가 삭제하기 때문에 비용이 거의 안나온다고 생각하면 됩니다.
+GB당 월 $0.023의 비용이 발생한다고 나와있지만 여기서는 이따 생성할 약 300MB의 Container만 사용하고 1MB 이하의 데이터만 생성됐다가 삭제하기 때문에 비용이 거의 안나온다고 생각하면 됩니다. (<https://cloud.google.com/storage/pricing?hl=ko#asia>)
 
+<br>
 
 ### 2.4 Cloud Functions
 
 Cloud Functions은 AWS의 Lambda와 동일한 동작을 합니다. python 파일과 requirements 파일만 가지고 등록하면 Cloud에서 빌드 과정을 거쳐 실행 가능한 컨테이너를 생성해줍니다.
 
 
-등록에 필요한 내용은 GitHub(<https://github.com/hyojupark/news_title_scrapper>)에 올려놨으니 참고하시면 됩니다. 중요한 파일은 python 파일, requirements.txt, env.yaml 3개 입니다.
+등록에 필요한 내용은 GitHub(<https://github.com/hyojupark/news_title_scrapper>)에 올려놨으니 참고하시면 됩니다. 중요한 파일은 `main.py`, `requirements.txt`, `env.yaml` 3개 입니다.
 
 ```bash
 ├── README.md
@@ -188,15 +192,15 @@ def news_data_save_to_gcs(request):
 
 ```
 
-코드는 직전 1분 내 등록된 뉴스를 가져와서 avro 포맷으로 Cloud Storage에 등록하는 내용입니다. 네이버 뉴스 검색 API에 검색 키워드가 반드시 필요하기 때문에 `기자`를 키워드로 등록해서 검색에 사용했고, BigQuery에 쉽게 넣을 수 있는 avro 포맷으로 데이터를 변환해서 저장했습니다.
+코드는 직전 1분 내 등록된 뉴스를 가져와서 Avro 포맷으로 Cloud Storage에 등록하는 내용입니다. 네이버 뉴스 검색 API에 검색 키워드가 반드시 필요하기 때문에 `기자`를 키워드로 등록해서 검색에 사용했고, BigQuery에 쉽게 넣을 수 있는 Avro 포맷으로 데이터를 변환해서 저장했습니다.
 
-이제 Cloud Function에 배포하면 됩니다. 배포 스크립트는 `deploy.sh`에 넣어놨습니다.
+이제 Cloud Functions에 배포하면 됩니다. 배포 스크립트는 `deploy.sh`에 넣어놨습니다.
 
 ```bash
 gcloud functions deploy news_data_save_to_gcs --runtime python38 --trigger-http --env-vars-file=credentials/env.yaml
 ```
 
-배포할때는 python 코드 내에 실행시킬 함수 하나를 지정(`news_data_save_to_gcs`)하고, runtime(`python 3.8`) trigger(`http`), env-vars-file(`환경변수 파일`)을 옵션으로 추가합니다. 여기서 trigger는 뒤에서 설명할 Cloud Scheduler에서 trigger 용도로 사용됩니다.
+배포할 때는 python 코드 내에 실행시킬 함수 하나를 지정(`news_data_save_to_gcs`)하고, runtime(`python 3.8`) trigger(`http`), env-vars-file(`환경변수 파일`)을 옵션으로 추가합니다. 여기서 trigger는 뒤에서 설명할 Cloud Scheduler에서 trigger 용도로 사용됩니다.
 
 배포 과정을 설명드리면 빌드 과정을 통해 Cloud Storage에 컨테이너 및 metadata가 저장되고 처음엔 1버전으로 등록됩니다. 배포할 때 마다 버전이 증가하면서 기존 컨테이너를 삭제하고 새로 추가합니다.
 
@@ -210,6 +214,7 @@ gcloud functions deploy news_data_save_to_gcs --runtime python38 --trigger-http 
 
 Cloud Functions 사용 비용은 호출건으로 봤을 때 월 200만건 무료이고 컴퓨팅 및 네트워크 비용이 별도로 발생하지만 이 부분도 거의 무료로 사용 가능한 수준이라고 보시면 될 것 같습니다. (<https://cloud.google.com/functions/pricing?hl=ko>)
 
+<br>
 
 ### 2.5 Cloud Scheduler
 
@@ -234,8 +239,9 @@ Cloud Functions 사용 비용은 호출건으로 봤을 때 월 200만건 무료
 **Cloud Scheduler Main**
 {: .text-center}
 
-Cloud Scheduler는 월 3개까지 무료로 사용 가능합니다. (<https://cloud.google.com/scheduler/pricing?hl=ko>)
+Cloud Scheduler는 3개까지 무료로 사용 가능합니다. (<https://cloud.google.com/scheduler/pricing?hl=ko>)
 
+<br>
 
 ### 2.6 BigQuery
 
@@ -247,6 +253,7 @@ Cloud Scheduler는 월 3개까지 무료로 사용 가능합니다. (<https://cl
 **BigQuery Table Schema**
 {: .text-center}
 
+<br>
 
 ### 2.7 BigQuery Data Transfer Service
 
@@ -263,7 +270,7 @@ BigQuery는 Cloud Storage에 저장된 데이터 파일을 별도의 코드 작�
 **Data Transfer Service Setting 2**
 {: .text-center}
 
-데이터 세트를 선택하고 Table 이름은 직접 입력해줍니다. 그리고 데이터가 저장되는 Cloud Storage 경로를 입력해주는데 디렉토리 내 저장된 파일을 모두 가져오도록 *을 꼭 붙여줍니다. 그리고 `Delete source files after transfer`를 체크헤줘서 전송된 파일은 삭제되도록 하고, 파일 포맷은 저장된 파일 포맷인 `AVRO`를 선택합니다.
+데이터 세트를 선택하고 Table 이름은 직접 입력해줍니다. 그리고 데이터가 저장되는 Cloud Storage URI를 입력해주는데, 디렉토리 내 저장된 파일을 모두 가져오도록 *을 꼭 붙여줍니다. 그리고 `Delete source files after transfer`를 체크헤줘서 전송된 파일은 삭제되도록 하고, 파일 포맷은 저장된 파일 포맷인 `AVRO`를 선택합니다.
 
 
 ![Data Transfer Service Setting 3](/assets/images/posts/2023-7-22-news-scrapping-using-google-cloud/dts_setting_3.png){: .align-center}
@@ -276,6 +283,7 @@ BigQuery는 Cloud Storage에 저장된 데이터 파일을 별도의 코드 작�
 
 BigQuery는 쿼리 시 발생하는 데이터 양에 따라 요금이 달라지기 때문에 계산하기 조금 번거롭지만, 월 1TB까지 무료로 사용이 가능하기 때문에 수집되는 뉴스 데이터 정도는 거의 무료 사용이 가능합니다.
 
+<br>
 
 ### 2.8 Looker Studio
 
@@ -307,9 +315,10 @@ ORDER BY
 이제 우측 상단에 저장 및 공유 버튼을 눌러 만든 레포트를 저장하면 됩니다. 저장된 레포트는 Looker Studio에서 확인이 가능한데, Cloud Console에서 Looker Studio를 검색해서
 들어가면 안나오고 <https://lookerstudio.google.com/>에 들어가서 확인하면 됩니다.
 
-여기까지하면 전체 데이터 수집 파이프라인이 완성됩니다.
+여기까지하면 전체 데이터 수집 파이프라인이 완성됩니다!
 
+<br>
 
 ## 3. 결론
 
-Cloud 경험을 해보기 위해 진행해봤는데 생각보다 무료로 사용 가능한 부분이 많아서 스터디으로 해보기 굉장히 좋았었습니다. 이후에는 수집된 데이터로 해볼 수 있는 것들을 찾아서 조금 더 발전시켜볼 계획입니다.
+Cloud 경험을 해보기 위해 진행해봤는데, 생각보다 무료로 사용 가능한 부분이 많아서 스터디으로 해보기 굉장히 좋았었습니다. 이후에는 수집된 데이터로 해볼 수 있는 것들을 찾아서 조금 더 발전시켜볼 계획입니다.
