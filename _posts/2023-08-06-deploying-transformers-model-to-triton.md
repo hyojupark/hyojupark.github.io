@@ -8,7 +8,7 @@ tags:
   - Triton
   - ONNX
   - TensorRT
-published: false
+# published: false
 ---
 
 일반적인 PyTorch 혹은 Transformers 모델 배포 성능을 극대화하기 위해 모델 포맷을 **ONNX**, **TensorRT**로 변환하고 **Triton Inference Server**로 배포하는 과정을 정리해봤습니다.
@@ -182,17 +182,435 @@ model_repository/
     └── config.pbtxt
 ```
 
+여기서는 ONNX의 Tokenizer, 모델, 앙상블 모델과 TensorRT의 Tokenizer, 모델, 앙상블 모델 총 6개의 모델을 각각 만들어야합니다.
+
 ### 4.2 모델 설정
 
-모델을 저장할 때는 모델 디렉토리 안에서 모델 버전 디렉토리에 모델 파일을 저장하고, 모델 설정 파일(`config.pbtxt`)를 저장합니다.
+#### 4.2.1 Tokenizer
 
+Tokenizer 모델은 `Python backend`를 이용해서 모델이 아닌 Python 코드를 작성해서 동작시킵니다. 따라서 모델 파일 대신 앞서 모델 학습 과정에서 저장한 Toeknizer 파일(`config.json`, `special_tokens_map.json`, `tokenizer_config.json`, `tokenizer.json`, `vocab.txt`)과 `main.py` 파일에 코드를 작성해서 저장해줍니다.
 
+```bash
+onnx_tokenizer
+├── 1
+│   ├── config.json
+│   ├── model.py
+│   ├── special_tokens_map.json
+│   ├── tokenizer_config.json
+│   ├── tokenizer.json
+│   └── vocab.txt
+└── config.pbtxt
+```
 
+```python
+# main.py
+import os
+from typing import Dict, List
+ 
+import numpy as np
+import triton_python_backend_utils as pb_utils
+from transformers import AutoTokenizer, PreTrainedTokenizer, TensorType
+ 
+class TritonPythonModel:
+    tokenizer: PreTrainedTokenizer
+    max_length: int = 300
+ 
+    def initialize(self, args: Dict[str, str]) -> None:
+        """
+        Initialize the tokenization process
+        :param args: arguments from Triton config file
+        """
+        # more variables in https://github.com/triton-inference-server/python_backend/blob/main/src/python.cc
+        path: str = os.path.join(args["model_repository"], args["model_version"])
+        self.tokenizer = AutoTokenizer.from_pretrained(path)
+ 
+    def execute(self, requests) -> "List[List[pb_utils.Tensor]]":
+        """
+        Parse and tokenize each request
+        :param requests: 1 or more requests received by Triton server.
+        :return: text as input tensors
+        """
+        responses = []
+        # for loop for batch requests (disabled in our case)
+        for request in requests:
+            # binary data typed back to string
+            query = [
+                t.decode("UTF-8")
+                for t in pb_utils.get_input_tensor_by_name(request, "input_text")
+                .as_numpy()
+                .tolist()
+            ]
+            tokens: Dict[str, np.ndarray] = self.tokenizer(
+                query, 
+                return_tensors=TensorType.NUMPY, 
+                truncation=True, 
+                padding='max_length', 
+                add_special_tokens=True, 
+                max_length=self.max_length
+            )
+ 
+            # tensorrt uses int32 as input type, ort uses int64
+            tokens = {k: v.astype(np.int64) for k, v in tokens.items()}
+            # communicate the tokenization results to Triton server
+            outputs = list()
+            for input_name in self.tokenizer.model_input_names:
+                tensor_input = pb_utils.Tensor(input_name, tokens[input_name])
+                outputs.append(tensor_input)
+ 
+            inference_response = pb_utils.InferenceResponse(output_tensors=outputs)
+            responses.append(inference_response)
+ 
+        return responses
+```
+
+위 코드에서 중요한 부분은 `pb_utils.get_input_tensor_by_name` 함수와 tokenizer의 `max_length`, token의 자료형 변환인 `v.astype(np.int64)`입니다.
+
+`pb_utils.get_input_tensor_by_name`를 통해서 triton으로 배포된 모델의 input을 받을 수 있습니다. 여기서는 단일 input만 생각하고 받도록 코드를 작성했습니다. 만약 batch 처리를 하려면 `t`를 배열로 받으면 됩니다.
+
+`max_length`는 앞에서 계속 설명드렸던 Tokenizer의 값을 그대로 사용합니다.
+
+`v.astype(np.int64)`는 모델 포맷이 **ONNX**인지 **TensorRT**인지에 따라 다릅니다. TensorRT는 Int64(Long) 타입을 지원하지 않기 때문에 Int32를 사용해야하고, ONNX는 Int64를 그대로 사용하면 됩니다.
+
+이제 Tokenizer의 설정 파일(`config.pbtxt`)을 추가합니다.
+
+```
+# config.pbtxt
+name: "onnx_tokenizer"
+backend: "python"
+max_batch_size: 0
+ 
+input [
+    {
+        name: "input_text"
+        data_type: TYPE_STRING
+        dims: [-1]
+    }
+]
+ 
+output [
+    {
+        name: "input_ids"
+        data_type: TYPE_INT64
+        dims: [-1, -1]
+    },
+    {
+        name: "attention_mask"
+        data_type: TYPE_INT64
+        dims: [-1, -1]
+    },
+    {
+        name: "token_type_ids"
+        data_type: TYPE_INT64
+        dims: [-1, -1]
+    }
+]
+ 
+instance_group [
+    {
+      count: 1
+      kind: KIND_GPU
+    }
+]
+```
+
+위 `config.pbtxt`도 동일하게 output의 data_type을 **ONNX**인 경우 `TYPE_INT64`로, **TensorRT**인 경우 `TYPE_INT32`로 설정하고 이름(`name`) 부분만 바꿔서 각각 설정하면 됩니다.
+
+#### 4.2.2 모델
+
+모델은 버전 디렉토리에 모델 파일(`model.onnx` or `model.plan`)을 넣고 설정 파일(`config.pbtxt`)을 작성하면 됩니다.
+
+```bash
+kcbert_onnx
+├── 1
+│   └── model.onnx
+└── config.pbtxt
+```
+
+```
+# ONNX의 config.pbtxt
+name: "kcbert_onnx"
+platform: "onnxruntime_onnx"
+max_batch_size: 1
+dynamic_batching {
+  max_queue_delay_microseconds: 100
+}
+instance_group [
+  {
+    count: 1
+    kind: KIND_GPU
+  }
+]
+input [
+  {
+    name: "input_ids",
+    data_type: TYPE_INT64
+    dims: [ 300 ]
+  },
+  {
+    name: "attention_mask",
+    data_type: TYPE_INT64
+    dims: [ 300 ]
+  },
+  {
+    name: "token_type_ids",
+    data_type: TYPE_INT64
+    dims: [ 300 ]
+  }
+]
+output [
+  {
+    name: "outputs",
+    data_type: TYPE_FP32
+    dims: [ 3 ]
+  }
+]
+```
+
+```
+# TensorRT의 config.pbtxt
+name: "kcbert_trt_fp16"
+platform: "tensorrt_plan"
+max_batch_size: 1
+dynamic_batching {
+  max_queue_delay_microseconds: 100
+}
+instance_group [
+  {
+    count: 1
+    kind: KIND_GPU
+  }
+]
+input [
+  {
+    name: "input_ids"
+    data_type: TYPE_INT32
+    dims: [ 300 ]
+  },
+  {
+    name: "attention_mask"
+    data_type: TYPE_INT32
+    dims: [ 300 ]
+  },
+  {
+    name: "token_type_ids"
+    data_type: TYPE_INT32
+    dims: [ 300 ]
+  }
+]
+output [
+  {
+    name: "outputs",
+    data_type: TYPE_FP32
+    dims: [ 3 ]
+  }
+]
+```
+
+동일하게 input의 data_type을 **ONNX**는 `TYPE_INT64`, **TensorRT**는 `TYPE_INT32`로 작성하고 이름(`name`)과 플랫폼(`platform`) 부분을 프레임워크에 맞게 작성합니다.
+
+#### 4.2.3 앙상블 모델
+
+이제 input이 들어오면 Tokenizer를 거쳐 모델의 output까지 한번에 처리해줄 앙상블 모델을 작성합니다. 앙상블 모델은 모델없이 파이프라인만 정의하기 때문에 버전 디렉토리는 비우고 설정 파일(`config.pbtxt`)만 작성하면 됩니다.
+
+```
+# ONNX Ensemble의 config.pbtxt
+name: "kcbert_onnx_ensemble"
+platform: "ensemble"
+max_batch_size: 0
+ 
+input [
+    {
+        name: "input_text"
+        data_type: TYPE_STRING
+        dims: [-1]
+    }
+]
+output [
+    {
+        name: "outputs"
+        data_type: TYPE_FP32
+        dims: [ -1, 3 ]
+    }
+]
+ 
+ensemble_scheduling {
+    step [
+        {
+            model_name: "onnx_tokenizer"
+            model_version: -1
+            input_map {
+                key: "input_text"
+                value: "input_text"
+            }
+            output_map [
+                {
+                    key: "input_ids"
+                    value: "input_ids"
+                },
+                {
+                    key: "attention_mask"
+                    value: "attention_mask"
+                },
+                {
+                    key: "token_type_ids"
+                    value: "token_type_ids"
+                }
+            ]
+        },
+        {
+            model_name: "kcbert_onnx"
+            model_version: -1
+            input_map [
+                {
+                    key: "input_ids"
+                    value: "input_ids"
+                },
+                {
+                    key: "attention_mask"
+                    value: "attention_mask"
+                },
+                {
+                    key: "token_type_ids"
+                    value: "token_type_ids"
+                }
+            ]
+            output_map {
+                key: "outputs"
+                value: "outputs"
+            }
+        }
+    ]
+}
+```
+
+```
+# TensorRT Ensemble의 config.pbtxt
+name: "kcbert_trt_fp16_ensemble"
+platform: "ensemble"
+max_batch_size: 0
+ 
+input [
+    {
+        name: "input_text"
+        data_type: TYPE_STRING
+        dims: [-1]
+    }
+]
+output [
+    {
+        name: "outputs"
+        data_type: TYPE_FP32
+        dims: [ -1, 3 ]
+    }
+]
+ 
+ensemble_scheduling {
+    step [
+        {
+            model_name: "trt_tokenizer"
+            model_version: -1
+            input_map {
+                key: "input_text"
+                value: "input_text"
+            }
+            output_map [
+                {
+                    key: "input_ids"
+                    value: "input_ids"
+                },
+                {
+                    key: "attention_mask"
+                    value: "attention_mask"
+                },
+                {
+                    key: "token_type_ids"
+                    value: "token_type_ids"
+                }
+            ]
+        },
+        {
+            model_name: "kcbert_trt_fp16"
+            model_version: -1
+            input_map [
+                {
+                    key: "input_ids"
+                    value: "input_ids"
+                },
+                {
+                    key: "attention_mask"
+                    value: "attention_mask"
+                },
+                {
+                    key: "token_type_ids"
+                    value: "token_type_ids"
+                }
+            ]
+            output_map {
+                key: "outputs"
+                value: "outputs"
+            }
+        }
+    ]
+}
+```
+
+여기서는 이름(`name`)과 플랫폼(`platform`) 부분만 프레임워크에 맞게 작성합니다. 참고로 `model_version: -1`은 최신 모델을 가져오겠다는 의미입니다.
+
+여기까지하면 모델 정의가 끝납니다. 이제 Triton Inference Server를 실행하면 됩니다.
 
 <br>
 
 ## 5. Triton Inference Server 시작
 
+이제 tritonserver 이미지를 만들어야합니다. 기본 이미지를 그냥 사용할수도 있지만, 위에 정의한 Tokenizer에서 사용하는 `transformers` 패키지 설치가 필요하기 때문에 Docker Image를 새로 빌드해줍니다.
+
+```dockerfile
+FROM nvcr.io/nvidia/tritonserver:23.04-py3
+ 
+RUN pip install transformers==4.18.0
+```
+
+```bash
+$ docker build -t nvcr.io/nvidia/tritonserver:23.04-py3-ap1 .
+...
+```
+
+이제 Docker로 서버를 실행해주면 됩니다. 아래에서 사용되는 옵션 중 `--shm-size=1g`는 default가 `64m`밖에 안되기 때문에 모델을 여러 개 띄울 경우 오류가 발생하므로 넉넉하게 늘려주는게 좋습니다.
+```bash
+$ docker run --gpus=1 --shm-size=1g --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 -v /home/user/triton-bert/model_repository:/models nvcr.io/nvidia/tritonserver:23.04-py3-ap1 tritonserver --model-repository=/models
+
+...
+
++--------------------------+---------+--------+
+| Model                    | Version | Status |
++--------------------------+---------+--------+
+| kcbert_onnx              | 1       | READY  |
+| kcbert_onnx_ensemble     | 1       | READY  |
+| kcbert_trt_fp16          | 1       | READY  |
+| kcbert_trt_fp16_ensemble | 1       | READY  |
+| onnx_tokenizer           | 1       | READY  |
+| trt_tokenizer            | 1       | READY  |
++--------------------------+---------+--------+
+
+...
+
+I1002 21:58:57.891440 62 grpc_server.cc:3914] Started GRPCInferenceService at 0.0.0.0:8001
+I1002 21:58:57.893177 62 http_server.cc:2717] Started HTTPService at 0.0.0.0:8000
+I1002 21:58:57.935518 62 http_server.cc:2736] Started Metrics Service at 0.0.0.0:8002
+```
+
+실행했을 때 위 처럼 6개 모델의 Status가 READY면 성공적으로 실행된 상태입니다.
 
 
 ## 6. 테스트
+
+
+
+
+
+
+
+
+## Reference
+- <https://github.com/triton-inference-server/server/issues/4026>
+- 
