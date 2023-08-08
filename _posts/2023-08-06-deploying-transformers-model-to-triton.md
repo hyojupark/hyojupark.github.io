@@ -8,7 +8,7 @@ tags:
   - Triton
   - ONNX
   - TensorRT
-# published: false
+published: false
 ---
 
 일반적인 PyTorch 혹은 Transformers 모델 배포 성능을 극대화하기 위해 모델 포맷을 **ONNX**, **TensorRT**로 변환하고 **Triton Inference Server**로 배포하는 과정을 정리해봤습니다.
@@ -21,7 +21,8 @@ tags:
   3. TensorRT 포맷 변환
   4. 배포 모델 구조 정의
   5. Trtion Inference Server 시작
-  6. 테스트
+  6. Inference
+  7. Performance Analyzer
 
 
 ## 1. 모델 학습
@@ -164,7 +165,6 @@ model_repository/
 │   └── config.pbtxt
 ├── onnx_tokenizer
 │   ├── 1
-│   │   ├── config.json
 │   │   ├── model.py
 │   │   ├── special_tokens_map.json
 │   │   ├── tokenizer_config.json
@@ -173,7 +173,6 @@ model_repository/
 │   └── config.pbtxt
 └── trt_tokenizer
     ├── 1
-    │   ├── config.json
     │   ├── model.py
     │   ├── special_tokens_map.json
     │   ├── tokenizer_config.json
@@ -188,12 +187,11 @@ model_repository/
 
 #### 4.2.1 Tokenizer
 
-Tokenizer 모델은 `Python backend`를 이용해서 모델이 아닌 Python 코드를 작성해서 동작시킵니다. 따라서 모델 파일 대신 앞서 모델 학습 과정에서 저장한 Toeknizer 파일(`config.json`, `special_tokens_map.json`, `tokenizer_config.json`, `tokenizer.json`, `vocab.txt`)과 `main.py` 파일에 코드를 작성해서 저장해줍니다.
+Tokenizer 모델은 `Python backend`를 이용해서 모델이 아닌 Python 코드를 작성해서 동작시킵니다. 따라서 모델 파일 대신 앞서 모델 학습 과정에서 저장한 Toeknizer 파일(`special_tokens_map.json`, `tokenizer_config.json`, `tokenizer.json`, `vocab.txt`)과 `model.py` 파일에 코드를 작성해서 저장해줍니다.
 
 ```bash
 onnx_tokenizer
 ├── 1
-│   ├── config.json
 │   ├── model.py
 │   ├── special_tokens_map.json
 │   ├── tokenizer_config.json
@@ -203,7 +201,7 @@ onnx_tokenizer
 ```
 
 ```python
-# main.py
+# model.py
 import os
 from typing import Dict, List
  
@@ -236,9 +234,7 @@ class TritonPythonModel:
             # binary data typed back to string
             query = [
                 t.decode("UTF-8")
-                for t in pb_utils.get_input_tensor_by_name(request, "input_text")
-                .as_numpy()
-                .tolist()
+                for t in pb_utils.get_input_tensor_by_name(request, "input_text").as_numpy().tolist()
             ]
             tokens: Dict[str, np.ndarray] = self.tokenizer(
                 query, 
@@ -601,16 +597,200 @@ I1002 21:58:57.935518 62 http_server.cc:2736] Started Metrics Service at 0.0.0.0
 
 실행했을 때 위 처럼 6개 모델의 Status가 READY면 성공적으로 실행된 상태입니다.
 
+<br>
 
-## 6. 테스트
+## 6. Inference
+
+이제 Inference를 해보겠습니다. 공식 GitHub에서 제공되는 대표 예제는 복잡한 코드의 gRPC 방식을 사용하기 때문에 여기서는 간단한 HTTP Request 방식을 사용해보도록 하겠습니다.
+
+```python
+import requests
+ 
+ 
+#URL = 'http://localhost:8000/v2/models/kcbert_onnx_ensemble/infer'
+URL = 'http://localhost:8000/v2/models/kcbert_trt_fp16_ensemble/infer'
+ 
+data = {
+    #'name': 'kcbert_onnx_ensemble',
+    'name': 'kcbert_trt_fp16_ensemble',
+    'inputs': [
+        {
+            'name': 'input_text',
+            'shape': [1],
+            'datatype': 'BYTES',
+            'data': ['네이버 3분기 영업이익 상승으로 인한 주가 상승']
+        }
+    ]
+}
+ 
+resp = requests.post(URL, json=data)
+print(resp.json())
+```
+
+```python
+# ONNX Response
+{'model_name': 'kcbert_onnx_ensemble', 'model_version': '1', 'parameters': {'sequence_id': 0, 'sequence_start': False, 'sequence_end': False}, 'outputs': [{'name': 'outputs', 'datatype   ': 'FP32', 'shape': [1, 3], 'data': [2.953115463256836, -0.5326197743415833, -3.386281967163086]}]}
+ 
+# TensorRT Response
+{'model_name': 'kcbert_trt_fp16_ensemble', 'model_version': '1', 'parameters': {'sequence_id': 0, 'sequence_start': False, 'sequence_end': False}, 'outputs': [{'name': 'outputs', 'data   type': 'FP32', 'shape': [1, 3], 'data': [2.93359375, -0.294677734375, -3.6796875]}]}
+```
+
+inference 방법은 위 코드처럼 URL을 작성하고 `name`과 `inputs`를 입력하면 됩니다. 모델의 output이 logits이기 때문에 outputs의 data에 logits가 있는 것을 확인할 수 있습니다.
+
+<br>
+
+## 7. Performance Analyzer
+
+Triton Inference Server에서 제공되는 Performance Analyzer를 사용하면 모델별 성능을 측정해볼 수 있습니다. 
+
+위에서 작성한 ONNX와 TensorRT 모델의 성능을 비교해볼건데, Performance Analyzer를 사용하기 위해서는 위의 1 dimension의 input을 2 dimension input으로 변경해줘야합니다. 단순 성능 측정만을 위해 변경하는 것이기 때문에 대충 변경해서 바로 확인해보겠습니다.
+
+변경해줘야할 부분은 ONNX와 TensorRT 각 Tokenizer의 `model.py`와 `config.pbtxt`, 앙상블 모델의 `config.pbtxt`입니다.
+
+```python
+# model.py
+
+    ...
+
+    query = [
+        t[0].decode("UTF-8")
+        for t in pb_utils.get_input_tensor_by_name(request, "input_text")
+        .as_numpy()
+        .tolist()
+    ]
+
+    ...
+```
+
+위 코드에서 `t.decode("UTF-8")`을 `t[0].decode("UTF-8")`로 변경해서 2 dimension input이지만 기존처럼 하나만 받아서 사용합니다.
+
+```
+# Tokenizer의 config.pbtxt
+name: "onnx_tokenizer"
+backend: "python"
+max_batch_size: 0
+ 
+input [
+    {
+        name: "input_text"
+        data_type: TYPE_STRING
+        dims: [-1, -1]
+    }
+]
+...
+```
+
+```
+# 앙상블 모델의 config.pbtxt
+name: "kcbert_onnx_ensemble"
+platform: "ensemble"
+max_batch_size: 0
+ 
+input [
+    {
+        name: "input_text"
+        data_type: TYPE_STRING
+        dims: [-1, -1]
+    }
+]
+```
+
+이제 Triton Inference Server를 재실행하고 성능 측정을 하러 갑니다.
+
+```bash
+$ docker run -it --ipc=host --net=host nvcr.io/nvidia/tritonserver:23.05-py3-sdk /bin/bash
+...
+
+root@server:/workspace# ./install/bin/perf_analyzer -m kcbert_onnx_ensemble -u 127.0.0.1:8000 --string-data="hello world" --shape=input_text:1,300
+*** Measurement Settings ***
+  Batch size: 1
+  Service Kind: Triton
+  Using "time_windows" mode for stabilization
+  Measurement window: 5000 msec
+  Using synchronous calls for inference
+  Stabilizing using average latency
+ 
+Request concurrency: 1
+  Client:
+    Request count: 1407
+    Throughput: 78.1558 infer/sec
+    Avg latency: 12787 usec (standard deviation 1695 usec)
+    p50 latency: 12530 usec
+    p90 latency: 13127 usec
+    p95 latency: 13572 usec
+    p99 latency: 17839 usec
+    Avg HTTP time: 12780 usec (send/recv 58 usec + response wait 12722 usec)
+  Server:
+    Inference count: 1407
+    Execution count: 1407
+    Successful request count: 1407
+    Avg request latency: 12423 usec (overhead 79 usec + queue 134 usec + compute 12210 usec)
+ 
+  Composing models:
+  kcbert_onnx, version: 1
+      Inference count: 1407
+      Execution count: 1407
+      Successful request count: 1407
+      Avg request latency: 11339 usec (overhead 65 usec + queue 96 usec + compute input 42 usec + compute infer 11103 usec + compute output 32 usec)
+ 
+  onnx_tokenizer, version: 1
+      Inference count: 1408
+      Execution count: 1408
+      Successful request count: 1408
+      Avg request latency: 1091 usec (overhead 21 usec + queue 38 usec + compute input 25 usec + compute infer 963 usec + compute output 44 usec)
+ 
+Inferences/Second vs. Client Average Batch Latency
+Concurrency: 1, throughput: 78.1558 infer/sec, latency 12787 usec
 
 
+root@server:/workspace# ./install/bin/perf_analyzer -m kcbert_trt_fp16_ensemble -u 127.0.0.1:8000 --string-data="hello world" --shape=input_text:1,300
+*** Measurement Settings ***
+  Batch size: 1
+  Service Kind: Triton
+  Using "time_windows" mode for stabilization
+  Measurement window: 5000 msec
+  Using synchronous calls for inference
+  Stabilizing using average latency
+ 
+Request concurrency: 1
+  Client:
+    Request count: 3447
+    Throughput: 191.474 infer/sec
+    Avg latency: 5221 usec (standard deviation 1260 usec)
+    p50 latency: 5070 usec
+    p90 latency: 5371 usec
+    p95 latency: 5565 usec
+    p99 latency: 8419 usec
+    Avg HTTP time: 5216 usec (send/recv 51 usec + response wait 5165 usec)
+  Server:
+    Inference count: 3447
+    Execution count: 3447
+    Successful request count: 3447
+    Avg request latency: 4928 usec (overhead 79 usec + queue 89 usec + compute 4760 usec)
+ 
+  Composing models:
+  kcbert_trt_fp16, version: 1
+      Inference count: 3447
+      Execution count: 3447
+      Successful request count: 3447
+      Avg request latency: 4062 usec (overhead 69 usec + queue 59 usec + compute input 55 usec + compute infer 3659 usec + compute output 220 usec)
+ 
+  trt_tokenizer, version: 1
+      Inference count: 3448
+      Execution count: 3448
+      Successful request count: 3448
+      Avg request latency: 874 usec (overhead 18 usec + queue 30 usec + compute input 19 usec + compute infer 768 usec + compute output 38 usec)
+ 
+Inferences/Second vs. Client Average Batch Latency
+Concurrency: 1, throughput: 191.474 infer/sec, latency 5221 usec
+```
 
+이렇게하면 ONNX와 TensorRT 각 모델의 처리량(Throughput)과 평균 latency까지 확인할 수 있습니다.
 
-
-
+`--concurrency-range 1:3` 옵션을 추가하면 request를 동시에 1개부터 3개까지 보낼 때의 성능을 측정할수도 있습니다.
 
 
 ## Reference
 - <https://github.com/triton-inference-server/server/issues/4026>
-- 
+- <https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/getting_started/quickstart.html>
+- <https://github.com/triton-inference-server/client/blob/main/src/c++/perf_analyzer/README.md>
