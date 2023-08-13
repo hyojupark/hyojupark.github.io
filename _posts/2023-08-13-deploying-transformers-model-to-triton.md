@@ -8,7 +8,7 @@ tags:
   - Triton
   - ONNX
   - TensorRT
-published: false
+# published: false
 ---
 
 일반적인 PyTorch 혹은 Transformers 모델 배포 성능을 극대화하기 위해 모델 포맷을 **ONNX**, **TensorRT**로 변환하고 **Triton Inference Server**로 배포하는 과정을 정리해봤습니다.
@@ -27,11 +27,12 @@ published: false
 
 ## 1. 모델 학습
 
-우선 Transformers 모델을 학습시키겠습니다. BERT 기반 중 하나인 `kcbert-large`([GitHub](https://github.com/Beomi/KcBERT))를 사용해서 감정분류(긍정, 중립, 부정) 모델을 학습시킵니다. 학습 코드는 짜로 작성하지 않았는데, 적당한 감정분석 데이터셋(ex. [금융 뉴스 문장 감성 분석 데이터셋](https://github.com/ukairia777/finance_sentiment_corpus))을 찾아서 하시면 됩니다.
+우선 Transformers 모델을 학습시키겠습니다. BERT 기반 모델 중 하나인 `kcbert-large`([GitHub](https://github.com/Beomi/KcBERT))를 사용해서 감정분류(긍정, 중립, 부정) 모델을 학습시킵니다. 학습 코드는 짜로 작성하지 않았는데, 적당한 감정분석 데이터셋(ex. [금융 뉴스 문장 감성 분석 데이터셋](https://github.com/ukairia777/finance_sentiment_corpus))을 찾아서 하시면 됩니다.
 
 학습에는 `pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel` 이미지에 `transformers 4.18.0` 패키지를 설치해서 사용했습니다. 
 
 ```python
+# train.py
 from transformers import AutoTokenizer, BertForSequenceClassification
 import torch 
  
@@ -45,6 +46,23 @@ tokenizer.save_pretrained('tokenizer_model')
 torch.save(model.state_dict(), 'model.pt')
 ```
 
+```dockerfile
+# train.Dockerfile
+FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel
+
+RUN pip install --upgrade pip
+RUN pip install transformers==4.18.0 --no-cache-dir
+```
+
+```bash
+$ docker build -t pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel-ap -f train.Dockerfile .
+$ docker run -it -v $(pwd):/workspace --gpus=1 pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel-ap /bin/bash
+
+...
+
+root@server:/workspace# python train.py
+```
+
 학습한 모델을 저장할 때는 사용한 Tokenizer와 모델을 따로 저장했는데, Tokenizer는 뒤에 따로 사용할 예정이고 모델은 ONNX, TensorRT로 변환하기 쉽도록 PyTorch 모델로 저장할 때 `state_dict`를 함께 저장합니다.
 
 <br>
@@ -53,9 +71,10 @@ torch.save(model.state_dict(), 'model.pt')
 
 저장한 PyTorch 모델(`model.pt`)을 ONNX 모델 포맷으로 변환합니다. 여기서 중요한 부분은 학습할 때 사용한 Tokenizer의 `max_length` 값을 input tensor의 length로 넣어주면 됩니다.
 
-아래 코드는 위 학습에 사용된 이미지에서 실행하면 됩니다.
+아래 코드는 `torch`와 `transformers`를 사용하기 때문에 위 학습에 사용된 이미지에서 실행하면 됩니다.
 
 ```python
+# to_onnx.py
 from transformers import AutoTokenizer, BertForSequenceClassification
 import torch
 import numpy as np
@@ -87,15 +106,24 @@ torch.onnx.export(
     opset_version=15)
 ```
 
+```bash
+$ docker run -it -v $(pwd):/workspace --gpus=1 pytorch/pytorch:1.11.0-cuda11.3-cudnn8-devel-ap /bin/bash
+
+...
+
+root@server:/workspace# python to_onnx.py
+```
+
 여기서는 PyTorch 모델 파일을 ONNX 모델 파일로 변환하기 위한 코드를 작성했지만, 사용하실 때는 위 학습코드 밑에 붙여서 PyTorch 모델 파일 생성 과정을 생략해도 상관없습니다.
 
 <br>
 
 ## 3. TensorRT 포맷 변환
 
-ONNX 모델(`model.onnx`)을 TensorRT 모델 포맷으로 변환할 때는 TensorRT의 `OnnxParser`를 이용해서 변환합니다. 때문에 TensorRT 이미지를 하나 가져와서 아래 코드를 실행시켜주면 됩니다. ONNX 변환할 때와 동일하게 `max_length`를 수정하면 되며, 이미지는 (#TODO: TensorRT 이미지 버전)을 사용했습니다.
+ONNX 모델(`model.onnx`)을 TensorRT 모델 포맷으로 변환할 때는 TensorRT의 `OnnxParser`를 이용해서 변환합니다. 때문에 TensorRT 이미지를 하나 가져와서 아래 코드를 실행시켜주면 됩니다. ONNX 변환할 때와 동일하게 `max_length`를 수정하면 되며, 이미지는 `nvcr.io/nvidia/tensorrt:23.05-py3`을 사용했습니다.
 
 ```python
+# to_trt.py
 import tensorrt as trt
  
 onnx_file_name = 'model.onnx'
@@ -134,6 +162,14 @@ with trt.Runtime(TRT_LOGGER) as runtime:
 buf = engine.serialize()
 with open(tensorrt_file_name, 'wb') as f:
     f.write(buf)
+```
+
+```bash
+$ docker run -it v $(pwd):/workspace --gpus=1 nvcr.io/nvidia/tensorrt:23.05-py3 /bin/bash
+
+...
+
+root@server:/workspace# python to_trt.py
 ```
 
 <br>
@@ -362,6 +398,13 @@ output [
 ]
 ```
 
+```bash
+kcbert_trt_fp16
+├── 1
+│   └── model.plan
+└── config.pbtxt
+```
+
 ```
 # TensorRT의 config.pbtxt
 name: "kcbert_trt_fp16"
@@ -407,6 +450,12 @@ output [
 #### 4.2.3 앙상블 모델
 
 이제 input이 들어오면 Tokenizer를 거쳐 모델의 output까지 한번에 처리해줄 앙상블 모델을 작성합니다. 앙상블 모델은 모델없이 파이프라인만 정의하기 때문에 버전 디렉토리는 비우고 설정 파일(`config.pbtxt`)만 작성하면 됩니다.
+
+```bash
+kcbert_onnx_ensemble
+├── 1
+└── config.pbtxt
+```
 
 ```
 # ONNX Ensemble의 config.pbtxt
@@ -477,6 +526,12 @@ ensemble_scheduling {
         }
     ]
 }
+```
+
+```bash
+kcbert_trt_fp16_ensemble
+├── 1
+└── config.pbtxt
 ```
 
 ```
@@ -552,7 +607,7 @@ ensemble_scheduling {
 
 여기서는 이름(`name`)과 플랫폼(`platform`) 부분만 프레임워크에 맞게 작성합니다. 참고로 `model_version: -1`은 최신 모델을 가져오겠다는 의미입니다.
 
-여기까지하면 모델 정의가 끝납니다. 이제 Triton Inference Server를 실행하면 됩니다.
+여기까지하면 모델 정의가 끝납니다. 이제 **Triton Inference Server**를 실행하면 됩니다.
 
 <br>
 
@@ -567,13 +622,13 @@ RUN pip install transformers==4.18.0
 ```
 
 ```bash
-$ docker build -t nvcr.io/nvidia/tritonserver:23.04-py3-ap1 .
+$ docker build -t nvcr.io/nvidia/tritonserver:23.04-py3-ap .
 ...
 ```
 
 이제 Docker로 서버를 실행해주면 됩니다. 아래에서 사용되는 옵션 중 `--shm-size=1g`는 default가 `64m`밖에 안되기 때문에 모델을 여러 개 띄울 경우 오류가 발생하므로 넉넉하게 늘려주는게 좋습니다.
 ```bash
-$ docker run --gpus=1 --shm-size=1g --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 -v /home/user/triton-bert/model_repository:/models nvcr.io/nvidia/tritonserver:23.04-py3-ap1 tritonserver --model-repository=/models
+$ docker run --gpus=1 --shm-size=1g --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 -v /home/user/triton-bert/model_repository:/models nvcr.io/nvidia/tritonserver:23.04-py3-ap tritonserver --model-repository=/models
 
 ...
 
@@ -641,7 +696,7 @@ inference 방법은 위 코드처럼 URL을 작성하고 `name`과 `inputs`를 �
 
 ## 7. Performance Analyzer
 
-Triton Inference Server에서 제공되는 Performance Analyzer를 사용하면 모델별 성능을 측정해볼 수 있습니다. 
+Triton Inference Server에서 제공되는 **Performance Analyzer**를 사용하면 <u>모델별 성능을 측정</u>해볼 수 있습니다. 
 
 위에서 작성한 ONNX와 TensorRT 모델의 성능을 비교해볼건데, Performance Analyzer를 사용하기 위해서는 위의 1 dimension의 input을 2 dimension input으로 변경해줘야합니다. 단순 성능 측정만을 위해 변경하는 것이기 때문에 대충 변경해서 바로 확인해보겠습니다.
 
@@ -653,7 +708,7 @@ Triton Inference Server에서 제공되는 Performance Analyzer를 사용하면 
     ...
 
     query = [
-        t[0].decode("UTF-8")
+        t[0].decode("UTF-8")  # 수정
         for t in pb_utils.get_input_tensor_by_name(request, "input_text")
         .as_numpy()
         .tolist()
@@ -674,7 +729,7 @@ input [
     {
         name: "input_text"
         data_type: TYPE_STRING
-        dims: [-1, -1]
+        dims: [-1, -1]  # 수정
     }
 ]
 ...
@@ -690,7 +745,7 @@ input [
     {
         name: "input_text"
         data_type: TYPE_STRING
-        dims: [-1, -1]
+        dims: [-1, -1]  # 수정
     }
 ]
 ```
