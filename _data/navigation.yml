@@ -44,10 +44,12 @@ sidebar-categories:
         url: /categories/Deep Learning, AI
       - title: MLflow
         url: /categories/MLflow
-      - title: BentoML
-        url: /categories/BentoML
       - title: Airflow
         url: /categories/Airflow
+      - title: BentoML
+        url: /categories/BentoML
+      - title: Triton
+        url: /categories/Triton
   - title: DevOps
     children:
       - title: Docker

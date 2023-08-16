@@ -1,0 +1,12 @@
+---
+title: Triton
+layout: archive
+permalink: /categories/Triton
+---
+
+{% assign posts = site.categories['Triton'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}
