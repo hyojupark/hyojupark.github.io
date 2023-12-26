@@ -21,8 +21,11 @@ DataHub는 **Data Discovery**(데이터 검색), **Data Observability**(데이�
 ## DataHub 설치
 DataHub 설치는 Docker Compose를 이용한 방법과 Helm Chart를 이용한 방법이 있습니다. 각각의 설치 방법은 아래 문서를 참고바랍니다.
 
-- Docker Compose: <https://datahubproject.io/docs/quickstart/>
-- Helm Chart: <https://github.com/acryldata/datahub-helm> (!수정 필요)
+- Docker Compose
+  - 가이드: <https://datahubproject.io/docs/quickstart/>
+- Helm
+  - 가이드: <https://datahubproject.io/docs/deploy/kubernetes/>
+  - Chart: <https://github.com/acryldata/datahub-helm>
 
 
 ## DataHub 사용방법
@@ -36,7 +39,16 @@ DataHub를 사용하는 순서는 다음과 같습니다.
 4. 거버넌스 정의
 
 ### 1. 데이터 소스 연결
-...
+![Create new source](/assets/images/posts/2023-12-04-introducing-datahub/new_source_connection.png){: .align-center}
+**Source 연결**
+{: .text-center}
+Ingestion에 들어가면 신규 Source를 추가할 수 있는 버튼을 확인할 수 있습니다. 눌러보면 다양한 타입의 Source가 보이는데, 없어도 Custom을 눌러서 직접 입력해서 사용 가능한 타입이 많기 때문에, <https://datahubproject.io/docs/>에 들어가서 필요한게 지원되는지 직접 확인해보는게 좋습니다.
+
+![Choose source type](/assets/images/posts/2023-12-04-introducing-datahub/new_source_connection_choose_type.png){: .align-center}
+**Source 종류**
+{: .text-center}
+
+연결이 되면 DataHub에서 데이터를 알아서 전부 읽어서 스키마와 스키마 버전을 표시하게 됩니다.
 
 
 ### 2. 데이터 정의 작성
