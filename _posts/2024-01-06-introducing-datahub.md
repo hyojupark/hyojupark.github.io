@@ -1,5 +1,5 @@
 ---
-title: DataHub로 데이터를 정리하고 모아보기
+title: DataHub로 데이터를 한 곳에 정리하고 모아보기
 categories:
   - Data
 tags:
