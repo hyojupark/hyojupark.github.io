@@ -1,0 +1,12 @@
+---
+title: ArgoCD
+layout: archive
+permalink: /categories/ArgoCD
+---
+
+{% assign posts = site.categories['ArgoCD'] %}
+{% for post in posts %}
+    {%- unless post.hidden -%}
+        {% include archive-single.html type=page.entries_layout %}
+    {%- endunless -%}
+{% endfor %}
