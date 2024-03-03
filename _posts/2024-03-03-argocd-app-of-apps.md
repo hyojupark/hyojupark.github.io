@@ -18,7 +18,7 @@ ArgoCD는 쿠버네티스를 위한 대표적인 선언적, GitOps 기반의 CD(
 ## App of Apps 패턴
 App of Apps 패턴은 ArgoCD의 여러 Application을 선언적으로 관리 및 배포하는 방법 중 하나입니다. 서비스를 배포할 application들을 yaml로 작성하고 application들을 배포할 application 하나를 생성 및 이용해서 배포하는 방식으로 동작합니다.
 
-![ArgoCD Application Delivery Example](/assets/images/posts/2024-02-24-argocd-app-of-apps/argocd_app_of_apps_example1.png){: .align-center}
+![ArgoCD Application Delivery Example](/assets/images/posts/2024-03-03-argocd-app-of-apps/argocd_app_of_apps_example1.png){: .align-center}
 **ArgoCD App of Apps Example** 
 {: .text-center}
 (출처: https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/)
