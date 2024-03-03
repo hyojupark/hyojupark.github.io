@@ -39,8 +39,11 @@ App of Apps 패턴은 ArgoCD의 여러 Application을 선언적으로 관리 및
 
 <br>
 
+## 끝맺음
+ArgoCD의 App of Apps 패턴은 GitOps 방식으로 서비스를 배포할 때 매우 효과적인 방법 중 하나입니다. 이 패턴이 Kubernetes에 서비스를 배포할 때 사용되는 만큼 **Kustomize**를 사용하면서 `Bases and Overlays 구조`(Production과 Develop 존을 구분하기 위한 구조)로 적용하면 더욱 큰 효과를 낼 수 있습니다.([참조 링크](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/#bases-and-overlays)) 나와있는 다양한 좋은 방법들을 적절히 활용해서 좋은 Ops 환경을 구축할 수 있으면 좋겠습니다.
 
-
+<br>
 
 ## Reference
-- https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/
+- <https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/>
+- <https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/#bases-and-overlays>
